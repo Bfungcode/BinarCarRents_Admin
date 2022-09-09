@@ -1,0 +1,58 @@
+.car-result {
+  margin-top: 3rem;
+  margin-left: 10%;
+  margin-right: 10%;
+
+  /* display: grid;
+  grid-template-columns: repeat(3, auto); */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2rem 24px;
+}
+
+.car-item {
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 24px;
+  /* max-width: 32%; */
+}
+
+@media screen and (min-width: 992px) {
+  .car-item {
+    max-width: 31%;
+  }
+}
+
+/* @media screen and (min-width: 768) and (max-width: 991px) {
+  .car-item {
+    max-width: 49%;
+  }
+} */
+
+.car-img {
+  max-height: 160px;
+  /* max-width: 270px; */
+  /* max-width: 14rem; */
+  max-width: -webkit-fill-available;
+  padding: 1rem;
+}
+
+.car-img-notfound {
+  background-color: #ced1ce;
+  height: 160px;
+  width: 270px;
+}
+
+.btn-choose-car {
+  background-color: #5cb85f;
+  border-color: #5cb85f;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.car-text-bold {
+  font-weight: 600;
+}
