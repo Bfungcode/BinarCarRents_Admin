@@ -1,0 +1,72 @@
+
+.maincontainer{
+  left: 0;
+}
+
+.WPContainer{
+  padding: 0;
+  padding-left: 0;
+}
+
+.wallpaperadmin {
+height: 100vh;
+
+left: 0;
+object-fit: cover;
+z-index: -1;
+}
+
+.form-container{
+  top: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-color: #FFFFFF;
+  
+}
+
+.welcome{
+  font-family: 'Arial';
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 36px;
+  margin-top: 32px;
+}
+
+.label{
+  font-family: 'Arial';
+  font-size: 14px;
+  line-height: 20px;
+  margin-top: 16px;
+}
+
+
+
+
+.fieldInput{
+box-sizing: border-box;
+width: 370px;
+height: 38,25px;
+background: #FFFFFF;
+margin-top: 8.9px ;
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 5px;
+}
+
+
+
+.signin {
+box-sizing: border-box;
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 8px 12px;
+gap: 10px;
+width: 370px;
+height: 36px;
+background-color: #0D28A6;
+color: white;
+border-radius: 2px;
+margin-top: 31.75px;
+}
