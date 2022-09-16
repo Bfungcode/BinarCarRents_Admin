@@ -2,7 +2,7 @@ import React from "react";
 import { useFormik } from 'formik';
 import * as yup from "yup";
 import { Router, useNavigate } from "react-router-dom";
-import '../component/LoginForm.css';
+import '../features/LoginForm.css';
 import axios from 'axios';
 
 
@@ -18,7 +18,7 @@ const handleSubmit = async (values, actions, navigate) => {
       data: values,
     })
     actions.setSubmitting(false);
-    actions.resetForm()
+    actions.resetForm();
     navigate('/home');
     localStorage.setItem ('users', JSON.stringify(response.data) );
 
