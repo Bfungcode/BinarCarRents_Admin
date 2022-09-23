@@ -1,19 +1,24 @@
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import './styles/LoginForm.css'
-import './styles/cars.css'
-import { Route, Routes } from 'react-router-dom'
-import Cars from './pages/cars';
-import Dashboard from './pages/dashboard';
+import CarAddEditPage from './pages/CarAddEditPage';
+import Cars from './pages/CarsPage';
+import Dashboard from './pages/DashboardPage';
 import LoginPage from './pages/LoginPage';
+import './styles/Cars.css';
+import './styles/LoginForm.css';
 
 const App = () => {
   return (
     // route menentukan URL
     <>
       <Routes>
-        <Route path='/' element={<LoginPage />} />
-        <Route path='dashboard' element={<Dashboard />} />
-        <Route path='cars' element={<Cars />} />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="cars">
+          <Route index element={<Cars />} />
+          <Route path="add" element={<CarAddEditPage />} />
+          <Route path=":id" element={<CarAddEditPage />} />
+        </Route>
       </Routes>
     </>
   );
