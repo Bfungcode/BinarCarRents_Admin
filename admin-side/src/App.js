@@ -1,10 +1,10 @@
-import './App.css';
-import './styles/LoginForm.css'
 import './styles/cars.css'
 import { Route, Routes } from 'react-router-dom'
 import Cars from './pages/cars';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/dashboard';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const App = () => {
   return (
