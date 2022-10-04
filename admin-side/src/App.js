@@ -1,4 +1,3 @@
-import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import './styles/LoginForm.css'
 import './styles/cars.css'
