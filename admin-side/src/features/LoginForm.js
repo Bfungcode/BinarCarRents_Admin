@@ -63,7 +63,7 @@ const LoginForm = () => {
         <div className="d-flex flex-column form-container">
             <div className="logo"> Logo here </div>
 
-            <div className="formisi">
+            
                 <h3 className="welcome">Welcome, Admin Binar</h3>
 
                 {formik.touched.email && formik.errors.email?(
@@ -111,7 +111,7 @@ const LoginForm = () => {
 
 
 
-        </div>
+        
     )
 }
 
