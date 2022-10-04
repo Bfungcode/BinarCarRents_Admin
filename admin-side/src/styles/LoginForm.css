@@ -1,17 +1,17 @@
-.logo{
+.logo {
     background-color: #CFD4ED;
     width: 100px;
     height: 34px;
-  }
+}
 
 .maincontainer {
- height: 100vh;
-  left: 0;
-  display: grid;
-  grid-template-columns: 65% 35%;
-  justify-content: start;
-  grid-template-columns: 80%, 20%;
-  background: #FFF;
+    height: 100vh;
+    left: 0;
+    display: grid;
+    grid-template-columns: 65% 35%;
+    justify-content: start;
+    grid-template-columns: 80%, 20%;
+    background: #FFF;
 }
 
 .WPContainer {
@@ -90,4 +90,4 @@
     padding: 12px 16px;
     border-radius: 5px;
     color: #D00C1A;
-  }
+}
