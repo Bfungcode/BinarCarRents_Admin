@@ -52,7 +52,7 @@ const LoginForm = () => {
 
     React.useEffect(()=> {
         if(isLoggedIn){
-          navigate('/dashoard');
+          navigate('/dashboard');
         }
       }, [isLoggedIn])
       
