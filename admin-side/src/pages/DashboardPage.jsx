@@ -1,214 +1,153 @@
 import axios from 'axios';
-import React, { useState } from 'react';
-import { Input, Label, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
+import { useEffect, useState } from 'react';
+import { Bar } from 'react-chartjs-2';
+import DataTable from 'react-data-table-component';
+import { Input, Label } from 'reactstrap';
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+const DashboardPage = () => {
+  const [orders, setOrders] = useState([]);
+  const [barOrders, setBarOrders] = useState([]);
 
-const GetMyTable = () => {
-    const data = [
-        {
-            id: 1,
-            car: 'Mercedez Benz',
-            user_email: 'wg@creative.org',
-            start_rent: '2022-01-26',
-            finish_rent: '2022-02-02',
-            price: 500000,
-            category: '4-6 orang'
-        },
-        {
-            id: 2,
-            car: 'Suzuki Xpander',
-            user_email: 'jwalters@creative.org',
-            start_rent: '2022-06-14',
-            finish_rent: '2022-02-02',
-            price: 500000,
-            category: '4-6 orang'
-        },
-        {
-            id: 3,
-            car: 'Porsche',
-            user_email: 'bbanner@creative.org',
-            start_rent: '2012-06-20',
-            finish_rent: '2022-02-02',
-            price: 500000,
-            category: '4-6 orang'
-        }
-        // ...
-    ];
+  const loadOrders = async () => {
+    await axios
+      .get('https://bootcamp-rent-car.herokuapp.com/admin/order')
+      .then(response => {
+        setOrders(response.data);
+        handleChangeMonth(new Date().getMonth());
+        console.log(response);
+      })
+      .catch(err => console.error(err));
+  };
 
-    const [tableData, setTableData] = useState(data);
+  useEffect(() => {
+    loadOrders();
+  }, []);
 
-    const columns = [
-        { label: 'Car', field: 'car' },
-        { label: 'User Email', field: 'user_email' },
-        { label: 'Start Rent', field: 'start_rent' },
-        { label: 'Finish Rent', field: 'finish_rent' },
-        { label: 'Price', field: 'price' },
-        { label: 'Category', field: 'category' }
-    ];
+  const getBarData = () => {
+    const dataObjectListByDate = [];
+    for (let i = 1; i <= 31; i++) {
+      const dataObjectByDate = { x: i.toString(), y: 0 };
+      const dataDates = barOrders.filter(
+        order => new Date(order.start_rent_at).getDate() === i || new Date(order.finish_rent_at).getDate() === i
+      );
+      dataObjectByDate.y = dataDates.length;
 
-    return (
-        <>
-            <Table hover bordered>
-                <thead>
-                    <tr style={{ backgroundColor: '#CFD4ED' }}>
-                        {columns.map(column => {
-                            return <th key={column.field}>{column.label}</th>;
-                        })}
-                    </tr>
-                </thead>
-                <tbody>
-                    {tableData.map((data, i) => {
-                        return (
-                            <tr key={i}>
-                                {columns.map((column, j) => {
-                                    const value = data[column.field] || '-';
-                                    return <td key={column.field + j}>{value}</td>;
-                                })}
-                            </tr>
-                        );
-                    })}
-
-                    <tr>
-                        <td>{/* ... */}</td>
-                    </tr>
-                </tbody>
-            </Table>
-        </>
-    );
-};
-
-const TablePagination = () => {
-    console.log([...Array(10).keys()]);
-    return (
-        <Pagination>
-            <PaginationItem>
-                <PaginationLink first href="#" />
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink previous href="#" />
-            </PaginationItem>
-            {[...Array(10).keys()].map(num => {
-                return (
-                    <PaginationItem>
-                        <PaginationLink href="#">{num + 1}</PaginationLink>
-                    </PaginationItem>
-                );
-            })}
-
-            <PaginationItem>
-                <PaginationLink href="#" next />
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#" last />
-            </PaginationItem>
-        </Pagination>
-    );
-};
-
-export default class Dashboard extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { data: [] };
+      dataObjectListByDate.push(dataObjectByDate);
     }
+    return dataObjectListByDate;
+  };
 
-    componentDidMount() {
-        this.getData();
+  const handleChangeMonth = month => {
+    console.log(month);
+    const barOrders = orders.filter(
+      order =>
+        (new Date(order.start_rent_at).getMonth() === month || new Date(order.finish_rent_at).getMonth() === month) &&
+        (new Date(order.start_rent_at).getFullYear() === 2022 || new Date(order.finish_rent_at).getFullYear() === 2022)
+    );
+    setBarOrders(barOrders);
+  };
+
+  const barData = {
+    datasets: [
+      {
+        label: 'Amount of Car Rented',
+        data: getBarData(),
+        backgroundColor: '#586B90'
+      }
+    ]
+  };
+
+  const barOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top'
+      },
+      title: {
+        display: true,
+        text: 'Rented Car Data Visualization'
+      }
     }
+  };
 
-    async getOrders() {
-        await axios
-            .get('https://bootcamp-rent-car.herokuapp.com/admin/order')
-            .then(response => {
-                const orders = response.data;
-
-                this.setState({
-                    data: [...orders]
-                });
-                console.log(response);
+  const columns = [
+    { name: 'User Email', selector: row => row.User?.email || '-', sortable: true },
+    { name: 'Car', selector: row => row.Car?.name || '-', sortable: true },
+    {
+      name: 'Start Rent',
+      selector: row => (row.start_rent_at ? new Date(row.start_rent_at).toDateString() : '-'),
+      sortable: true
+    },
+    {
+      name: 'Finish Rent',
+      selector: row => (row.finish_rent_at ? new Date(row.finish_rent_at).toDateString() : '-'),
+      sortable: true
+    },
+    {
+      name: 'Price',
+      selector: row =>
+        row.Car?.price
+          ? row.Car?.price.toLocaleString('id-ID', {
+              style: 'currency',
+              currency: 'IDR'
             })
-            .catch(err => console.error(err));
-    }
+          : '-',
+      sortable: true
+    },
+    { name: 'Category', selector: row => row.Car?.category || '-', sortable: true }
+  ];
 
-    getData = (page = '', size = 10, fromDate = '', toDate = '') => {
-        // document.getElementById('size').value = size;
-        // document.getElementById('page').value = page;
+  return (
+    <>
+      <div className="container">
+        <div className="row">
+          <div className="col-3">
+            <Label for="exampleSelect">Month</Label>
+            <Input
+              id="exampleSelect"
+              name="selectMonth"
+              type="select"
+              onChange={e => handleChangeMonth(+e.target.value)}
+              defaultValue={new Date().getMonth()}
+            >
+              {[
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December'
+              ].map((month, i) => {
+                return (
+                  <option value={i} key={'option-' + i}>
+                    {month} - 2022
+                  </option>
+                );
+              })}
+            </Input>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
+            <Bar options={barOptions} data={barData}></Bar>
+          </div>
+        </div>
 
-        this.getOrders();
-    };
+        <div className="row">
+          <div className="col">
+            <DataTable columns={columns} data={orders} pagination></DataTable>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
 
-    onSubmit = e => {
-        const page = document.getElementById('page').value;
-        const size = document.getElementById('size').value;
-        const fromDate = document.getElementById('fromDate').value;
-        const toDate = document.getElementById('toDate').value;
-
-        this.getData(page, size, fromDate, toDate);
-    };
-
-    render() {
-        const { data } = this.state;
-
-        const dataObjectsByDate = [];
-        for (let i = 1; i <= 31; i++) {
-            const dataObjectByDate = { name: i.toString(), count: i * 2 };
-            // const dataDates = data.filter(
-            //   (datum) =>
-            //     new Date(datum.start_rent_at).getDate() === i ||
-            //     new Date(datum.finish_rent_at).getDate() === i
-            // );
-            // dataObjectByDate.count = dataDates.length;
-
-            dataObjectsByDate.push(dataObjectByDate);
-        }
-        console.log(dataObjectsByDate);
-
-        return (
-            <>
-                <div className="container">
-                    <div className="row">
-                        <div className="col">
-                            <div className="bar-chart">
-                                <p>
-                                    <strong> Rented Car Data Visualization</strong>
-                                </p>
-                                <Label for="exampleSelect">Month</Label>
-                                <Input id="exampleSelect" name="select" type="select">
-                                    <option>Januari 2022</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </Input>
-                                {/* <input type="number" id="size" placeholder="pagesize" />
-        <input type="number" id="page" placeholder="page" />
-        <input type="date" id="fromDate" placeholder="from date" />
-        <input type="date" id="toDate" placeholder="to date" />
-        <button onClick={this.onSubmit}>Submit</button> */}
-                                {/* width="100%" */}
-                                <ResponsiveContainer aspect={2}>
-                                    <BarChart data={dataObjectsByDate} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                                        <CartesianGrid stroke="#ccc" />
-                                        <XAxis dataKey="name" label={'Date'} />
-                                        <YAxis dataKey="count" label={'Amount of Car Rented'} />
-                                        <Tooltip />
-                                        <Bar type="monotone" dataKey="count" fill="#586B90" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col">
-                            Dashboard
-                            <p>List Order</p>
-                            <GetMyTable />
-                            <div className="text-right">
-                                <TablePagination />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </>
-        );
-    }
-}
+export default DashboardPage;
