@@ -1,8 +1,8 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { Input, Label, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import React, { useNavigate } from 'react';
+import { useSelector } from 'react-redux';
+import Dashboard from '../features/dashboard';
 
+<<<<<<< HEAD
 function checkToken () {
     isAccessToken: true : false
 }
@@ -138,81 +138,26 @@ export default class Dashboard extends React.Component {
         // document.getElementById('page').value = page;
 
         this.getOrders();
+=======
+const DashboardPage = () => {
+  const navigate = useNavigate();
+  const {isLoggedIn} = useSelector((state) => state.auth)
+  
+//  logic validasi login 
+  React.useEffect(()=>{ 
+    if(isLoggedIn === false){
+      alert('belum login'); 
+      navigate('/');  
+>>>>>>> c87d13ef19671d5b36ce2791ebfb47bc54cc0aad
     };
-
-    onSubmit = e => {
-        const page = document.getElementById('page').value;
-        const size = document.getElementById('size').value;
-        const fromDate = document.getElementById('fromDate').value;
-        const toDate = document.getElementById('toDate').value;
-
-        this.getData(page, size, fromDate, toDate);
-    };
-
-    render() {
-        const { data } = this.state;
-
-        const dataObjectsByDate = [];
-        for (let i = 1; i <= 31; i++) {
-            const dataObjectByDate = { name: i.toString(), count: i * 2 };
-            // const dataDates = data.filter(
-            //   (datum) =>
-            //     new Date(datum.start_rent_at).getDate() === i ||
-            //     new Date(datum.finish_rent_at).getDate() === i
-            // );
-            // dataObjectByDate.count = dataDates.length;
-
-            dataObjectsByDate.push(dataObjectByDate);
-        }
-        console.log(dataObjectsByDate);
-
-        return (
-            <>
-                <div className="container">
-                    <div className="row">
-                        <div className="col">
-                            <div className="bar-chart">
-                                <p>
-                                    <strong> Rented Car Data Visualization</strong>
-                                </p>
-                                <Label for="exampleSelect">Month</Label>
-                                <Input id="exampleSelect" name="select" type="select">
-                                    <option>Januari 2022</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </Input>
-                                {/* <input type="number" id="size" placeholder="pagesize" />
-        <input type="number" id="page" placeholder="page" />
-        <input type="date" id="fromDate" placeholder="from date" />
-        <input type="date" id="toDate" placeholder="to date" />
-        <button onClick={this.onSubmit}>Submit</button> */}
-                                {/* width="100%" */}
-                                <ResponsiveContainer aspect={2}>
-                                    <BarChart data={dataObjectsByDate} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                                        <CartesianGrid stroke="#ccc" />
-                                        <XAxis dataKey="name" label={'Date'} />
-                                        <YAxis dataKey="count" label={'Amount of Car Rented'} />
-                                        <Tooltip />
-                                        <Bar type="monotone" dataKey="count" fill="#586B90" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col">
-                            Dashboard
-                            <p>List Order</p>
-                            <GetMyTable />
-                            <div className="text-right">
-                                <TablePagination />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </>
-        );
-    }
-}
+    
+  }, [isLoggedIn])
+  
+  
+  return(
+    <>
+        <Dashboard /> 
+    </>
+  )
+};
+export default DashboardPage

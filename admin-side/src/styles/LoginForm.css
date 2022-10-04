@@ -1,23 +1,41 @@
+.logo{
+    background-color: #CFD4ED;
+    width: 100px;
+    height: 34px;
+  }
+
 .maincontainer {
-    left: 0;
-    display: flex;
+ height: 100vh;
+  left: 0;
+  display: grid;
+  grid-template-columns: 65% 35%;
+  justify-content: start;
+  grid-template-columns: 80%, 20%;
+  background: #FFF;
 }
 
 .WPContainer {
+    background: #0D28A6;
     padding: 0;
+    height: 100%;
     padding-left: 0;
 }
 
 .wallpaperadmin {
-    height: 100vh;
+    height: 100%;
+    width: 100%;
+    position: static;
+    padding: 0;
     left: 0;
     object-fit: cover;
-    z-index: -1;
+    z-index: 0;
 }
 
 .form-container {
+    padding-left: 5%;
+    height: 100%;
+    width: 100%;
     top: 0;
-    height: 100vh;
     display: flex;
     justify-content: center;
     background-color: #FFFFFF;
@@ -63,3 +81,13 @@
     border-radius: 2px;
     margin-top: 31.75px;
 }
+
+.failed-alert {
+    width: 370px;
+    font-size: 12px;
+    font-family: 'Arial';
+    background: rgba(208, 12, 26, 0.1);
+    padding: 12px 16px;
+    border-radius: 5px;
+    color: #D00C1A;
+  }

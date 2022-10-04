@@ -3,32 +3,31 @@ import { useFormik } from 'formik';
 import * as yup from "yup";
 import { Router, useNavigate } from "react-router-dom";
 import '../App'
-import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux";
+import { login } from '../auth/auth-slice';
 
 
-const handleSubmit = async (values, actions, navigate) => {
-    try {
-        const response = await axios({
-            method: "POST",
-            // masih pakai login url cutomer
-            url: "https://bootcamp-rent-car.herokuapp.com/customer/auth/login",
-            data: values,
+const handleSubmit = async (values, actions, dispatch, navigate) => {
+
+    const { email, password } = values;
+    dispatch(login({ email, password }))
+        .unwrap()
+        .then(() => {
+            console.log('sukses');
+            navigate('/dashboard');
+
         })
-        actions.setSubmitting(false);
-        actions.resetForm()
-        navigate('/dashboard');
-        localStorage.setItem('users', JSON.stringify(response.data.access_token));
-    } catch (error) {
-        actions.setSubmitting(false);
-        alert(error.messsage);
-    };
-
-
-
+        .catch(() => {
+            console.log('error');
+        })
 }
 
+
+
 const LoginForm = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { isLoggedIn } = useSelector((state) => state.auth)
     // const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
     const formik = useFormik({
 
@@ -39,27 +38,37 @@ const LoginForm = () => {
         },
 
         validationSchema: yup.object().shape({
-            email: yup.string().email('Please enter a valid email').required(),
+            email: yup.string().email('Masukkan username dan password yang benar. Perhatikan penggunaan huruf kapital.').required(),
             password: yup
                 .string()
                 .min(6)
-                // .matches(passwordRules, { message: 'Email or password is incorrect' })
                 .required('Required'),
         }),
 
         onSubmit: (values, actions) => {
-            handleSubmit(values, actions, navigate)
+            handleSubmit(values, actions, dispatch, navigate)
         }
     });
+
+    React.useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/dashboard');
+        }
+    }, [isLoggedIn])
+
 
 
 
     return (
         <div className="d-flex flex-column form-container">
-            <div className="d-inline-flex bg-primary logo"> Logo here </div>
+            <div className="logo"> Logo here </div>
 
             <div className="formisi">
                 <h3 className="welcome">Welcome, Admin Binar</h3>
+
+                {formik.touched.email && formik.errors.email ? (
+                    <div className="failed-alert" > {formik.errors.email}</div>
+                ) : null}
 
                 <form onSubmit={formik.handleSubmit} autoComplete="off">
                     <label className="label">Email</label>
