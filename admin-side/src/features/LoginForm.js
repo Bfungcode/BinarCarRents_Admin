@@ -17,7 +17,7 @@ const handleSubmit = async (values, actions, navigate) => {
         actions.setSubmitting(false);
         actions.resetForm()
         navigate('/dashboard');
-        localStorage.setItem('users', JSON.stringify(response.data));
+        localStorage.setItem('users', JSON.stringify(response.data.access_token));
     } catch (error) {
         actions.setSubmitting(false);
         alert(error.messsage);
