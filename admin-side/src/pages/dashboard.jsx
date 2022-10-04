@@ -1,6 +1,7 @@
 import React, { useNavigate } from 'react';
 import { useSelector } from 'react-redux';
 import Dashboard from '../features/dashboard';
+import "../styles/NavandSideBar.css";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -17,9 +18,33 @@ const DashboardPage = () => {
   
   
   return(
-    <>
-        <Dashboard /> 
-    </>
+    <div className="Dashboard">
+
+      <div className="main-sidebar">
+        
+          <div className="logo"> logo</div>
+          <div> icon1</div>
+          <p>subtitle</p>
+          <div> icon2</div>
+          <p>subtitle</p>
+      </div>
+      <div className="h-navbar">
+        <div className="logo">Binar-Car</div>
+
+      <div className="sidebar-content">
+        <div className="sidebar">
+          <ul>
+            <li>title1</li>
+            <li>title2</li>
+          </ul>
+        </div>
+          <Dashboard />
+        </div>  
+      </div>
+      
+
+
+    </div>
   )
 };
 export default DashboardPage
