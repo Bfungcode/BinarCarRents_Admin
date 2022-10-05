@@ -12,6 +12,12 @@
   justify-content: start;
   background: #FFF;
 }
+@media screen and (max-width: 1024px ) {
+    .maincontainer{
+        grid-template-columns: 50% 50%;
+    }
+    
+}
 
 .WPContainer {
     background: #0D28A6;
@@ -19,6 +25,13 @@
     height: 100%;
     padding-left: 0;
 }
+
+@media screen and (max-width: 768px ){
+    .WPContainer{
+        display: none;
+    }
+}
+
 
 .wallpaperadmin {
     height: 100%;
