@@ -10,7 +10,6 @@
   display: grid;
   grid-template-columns: 65% 35%;
   justify-content: start;
-  grid-template-columns: 80%, 20%;
   background: #FFF;
 }
 
@@ -35,7 +34,6 @@
     padding-left: 5%;
     height: 100%;
     width: 100%;
-    top: 0;
     display: flex;
     justify-content: center;
     background-color: #FFFFFF;

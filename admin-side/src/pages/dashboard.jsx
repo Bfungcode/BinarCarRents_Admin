@@ -1,4 +1,5 @@
-import React, { useNavigate } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Dashboard from '../features/dashboard';
 import "../styles/NavandSideBar.css";
