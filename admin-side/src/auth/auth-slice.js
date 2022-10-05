@@ -1,5 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import authAPI from './authAPI';
+import authAPI from './auth-API';
 import { setMessage } from './message-slice';
 
 
