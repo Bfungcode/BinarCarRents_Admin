@@ -2,11 +2,12 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Modal, ModalBody, ModalFooter, Toast, ToastBody } from 'reactstrap';
+import NavSideBar from '../features/NavSideBar';
 import SVGClock from '../vectors/svg-clock';
 import SVGUser from '../vectors/svg-user';
 import './../styles/Cars.css';
 
-const Cars = () => {
+const CarsContent = () => {
   const [cars, setCars] = useState([]); // cars keseluruhan
   const [filteredCars, setFilteredCars] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -207,6 +208,10 @@ const Cars = () => {
       </div>
     </>
   );
+};
+
+const Cars = () => {
+  return <NavSideBar PageContent={CarsContent} />;
 };
 
 export default Cars;

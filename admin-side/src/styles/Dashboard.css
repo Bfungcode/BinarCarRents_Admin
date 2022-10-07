@@ -1,0 +1,20 @@
+.dashboard-title {
+  font-family: 'Arial';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  margin-left: 4px;
+}
+
+.title-square {
+  width: 4px;
+  height: 24px;
+  background: #0d28a6;
+}
+
+.table-dashboard-text {
+  font-family: 'Arial';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+}

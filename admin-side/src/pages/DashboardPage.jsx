@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import DataTable from 'react-data-table-component';
 import { Input, Label } from 'reactstrap';
+import NavSideBar from '../features/NavSideBar';
+import './../styles/Dashboard.css';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-const DashboardPage = () => {
+const DashboardContent = () => {
   const [orders, setOrders] = useState([]);
   const [barOrders, setBarOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -65,7 +67,8 @@ const DashboardPage = () => {
       },
       title: {
         display: true,
-        text: 'Rented Car Data Visualization'
+        text: 'Date',
+        position: 'bottom'
       }
     }
   };
@@ -102,6 +105,14 @@ const DashboardPage = () => {
       <div className="container">
         <div className="row">
           <div className="col-3">
+            <div className="d-flex">
+              <div className="title-square"></div>
+              <p className="dashboard-title">Rented Car Data Visualization</p>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-3">
             <Label for="exampleSelect">Month</Label>
             <Input
               id="exampleSelect"
@@ -136,16 +147,29 @@ const DashboardPage = () => {
         <div className="row">
           <div className="col">
             {loading && <p className="text-center">Getting order data...</p>}
-            {!loading && <Bar options={barOptions} data={barData}></Bar>}
+            {!loading && <Bar style={{ background: '#f4f5f7' }} options={barOptions} data={barData}></Bar>}
           </div>
         </div>
 
+        <div className="row">
+          <div className="col-3">
+            <div className="table-dashboard-text">Dashboard</div>
+            <div className="d-flex">
+              <div className="title-square"></div>
+              <p className="dashboard-title">List Order</p>
+            </div>
+          </div>
+        </div>
         <div className="row">
           <div className="col">{!loading && <DataTable columns={columns} data={orders} pagination></DataTable>}</div>
         </div>
       </div>
     </>
   );
+};
+
+const DashboardPage = () => {
+  return <NavSideBar PageContent={DashboardContent} />;
 };
 
 export default DashboardPage;
