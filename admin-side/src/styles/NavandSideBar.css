@@ -11,7 +11,18 @@
   height: 34px;
 }
 
-.h-navbar {
+.search-button{
+  width: 71px;
+  height: 36px;
+  border: 1px solid #0D28A6;
+  border-radius: 2px;
+  color: #0D28A6;
+  text-align: center;
+  font-size: 14px;
+}
+
+
+.right-layout {
   display: grid;
   padding-top: 18;
   grid-template-rows: auto 1fr;
@@ -20,6 +31,20 @@
   box-sizing: border-box;
 }
 
+.h-navbar{
+  display: grid;
+  grid-template-columns: auto auto 1fr auto auto;
+}
+
+.acct-icon{
+  height: 38px;
+  width: 38px;
+  border: none;
+  border-radius: 19px;
+  background-color: #CFD4ED;
+  color: black;
+  text-align: center;
+}
 
 .sidebar-content{
   display: grid;
