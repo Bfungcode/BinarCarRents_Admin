@@ -31,9 +31,7 @@ const DashboardPage = () => {
     const dataObjectListByDate = [];
     for (let i = 1; i <= 31; i++) {
       const dataObjectByDate = { x: i.toString(), y: 0 };
-      const dataDates = barOrders.filter(
-        order => new Date(order.start_rent_at).getDate() === i || new Date(order.finish_rent_at).getDate() === i
-      );
+      const dataDates = barOrders.filter(order => new Date(order.start_rent_at).getDate() === i);
       dataObjectByDate.y = dataDates.length;
 
       dataObjectListByDate.push(dataObjectByDate);
@@ -44,8 +42,7 @@ const DashboardPage = () => {
   const handleChangeMonth = (month, dataList) => {
     const barOrders = (dataList || orders).filter(
       order =>
-        (new Date(order.start_rent_at).getMonth() === month || new Date(order.finish_rent_at).getMonth() === month) &&
-        (new Date(order.start_rent_at).getFullYear() === 2022 || new Date(order.finish_rent_at).getFullYear() === 2022)
+        new Date(order.start_rent_at).getMonth() === month && new Date(order.start_rent_at).getFullYear() === 2022
     );
     setBarOrders(barOrders);
   };
