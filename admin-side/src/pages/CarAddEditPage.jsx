@@ -10,39 +10,48 @@ const CarAddEditPage = () => {
   const [isAdd, setIsAdd] = useState(false);
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
-  const [car, setCar] = useState({});
+  // const [car, setCar] = useState({});
+  const [error, setError] = useState('');
   const controller = new AbortController();
 
   const navigate = useNavigate();
 
   const handleSubmit = async (values, actions) => {
+    values.price = +values.price;
+    values.status = false;
     if (id) {
+      /** edit */
       await axios
         .put(`https://bootcamp-rent-car.herokuapp.com/admin/car/${id}`, values)
         .then(response => {
           console.log(response);
           actions.setSubmitting(false);
           actions.resetForm();
+          localStorage.setItem('responseStatus', 'OK');
+          setError(null);
           navigate('/cars');
         })
         .catch(error => {
           console.error(error);
           actions.setSubmitting(false);
-          alert(error.response.data.message);
+          setError(error);
         });
     } else {
+      /** add new */
       await axios
         .post(`https://bootcamp-rent-car.herokuapp.com/admin/car`, values)
         .then(response => {
           console.log(response);
           actions.setSubmitting(false);
           actions.resetForm();
+          localStorage.setItem('responseStatus', 'OK');
+          setError(null);
           navigate('/cars');
         })
         .catch(error => {
           console.error(error);
           actions.setSubmitting(false);
-          alert(error.response.data.message);
+          setError(error);
         });
     }
   };
@@ -53,11 +62,10 @@ const CarAddEditPage = () => {
       const { data } = await axios.get('https://bootcamp-rent-car.herokuapp.com/admin/car/' + id, {
         signal: controller.signal
       });
-      setCar(data);
-      formik.setFieldValue('carName', data?.name);
-      formik.setFieldValue('price', data?.price);
-      formik.setFieldValue('photoFile', data?.image);
-      formik.setFieldValue('category', data?.category);
+      formik.setFieldValue('name', data?.name || '');
+      formik.setFieldValue('price', data?.price || '');
+      formik.setFieldValue('image', data?.image || '');
+      formik.setFieldValue('category', data?.category || '');
     } catch (error) {
       console.error(error);
     }
@@ -73,15 +81,20 @@ const CarAddEditPage = () => {
 
   const formik = useFormik({
     initialValues: {
-      carName: '',
+      name: '',
       price: '',
-      photoFile: '',
+      image: '',
       category: ''
     },
     validationSchema: Yup.object({
-      carName: Yup.string().max(20, 'max 20 karakter').required('Tidak boleh kosong'),
-      price: Yup.string().required('Tidak boleh kosong'),
-      photoFile: Yup.string().required('Tidak boleh kosong'),
+      name: Yup.string().max(100, 'max 100 karakter').required('Tidak boleh kosong'),
+      price: Yup.number('Harus angka')
+        .required('Tidak boleh kosong')
+        .positive()
+        .integer()
+        .min(10000, 'minimum Rp 10,000')
+        .max(2147483647, 'maximum Rp 2,147,483,647'),
+      image: Yup.string().max(512, 'max 512 karakter').required('Tidak boleh kosong'),
       category: Yup.string().required('pilih salah satu')
     }),
     onSubmit: (values, actions) => {
@@ -93,7 +106,8 @@ const CarAddEditPage = () => {
   return (
     <>
       <div className="container mt-3">
-        {console.log(formik.errors)}
+        {error && <p>Error! {error}</p>}
+        {/* {console.log(formik.errors)} */}
         <div className="row">
           <div className="col">
             <p style={{ fontWeight: '700', fontSize: '20px' }}>{isAdd ? 'Add New Car' : 'Edit Car'}</p>
@@ -108,13 +122,13 @@ const CarAddEditPage = () => {
                     <Col sm={6}>
                       <Input
                         placeholder="Input Nama/Tipe Mobil"
-                        name="carName"
+                        name="name"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.carName}
+                        value={formik.values.name}
                       ></Input>
-                      {formik.touched.carName && formik.errors.carName && (
-                        <p className="text-danger"> {formik.errors.carName} </p>
+                      {formik.touched.name && formik.errors.name && (
+                        <p className="text-danger"> {formik.errors.name} </p>
                       )}
                     </Col>
                   </FormGroup>
@@ -141,15 +155,15 @@ const CarAddEditPage = () => {
                     </Label>
                     <Col sm={6}>
                       <Input
-                        name="photoFile"
+                        name="image"
                         placeholder="Upload Foto Mobil"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.photoFile}
+                        value={formik.values.image}
                       ></Input>
                       <FormText>File size max. 2MB</FormText>
-                      {formik.touched.photoFile && formik.errors.photoFile && (
-                        <p className="text-danger"> {formik.errors.photoFile} </p>
+                      {formik.touched.image && formik.errors.image && (
+                        <p className="text-danger"> {formik.errors.image} </p>
                       )}
                     </Col>
                   </FormGroup>
