@@ -1,22 +1,23 @@
-.logo{
+.logo {
     background-color: #CFD4ED;
     width: 100px;
     height: 34px;
-  }
+}
 
 .maincontainer {
- height: 100vh;
-  left: 0;
-  display: grid;
-  grid-template-columns: 65% 35%;
-  justify-content: start;
-  background: #FFF;
+    height: 100vh;
+    left: 0;
+    display: grid;
+    grid-template-columns: 65% 35%;
+    justify-content: start;
+    grid-template-columns: 80%, 20%;
+    background: #FFF;
 }
-@media screen and (max-width: 1024px ) {
-    .maincontainer{
+
+@media screen and (max-width: 1024px) {
+    .maincontainer {
         grid-template-columns: 50% 50%;
     }
-    
 }
 
 .WPContainer {
@@ -26,12 +27,11 @@
     padding-left: 0;
 }
 
-@media screen and (max-width: 768px ){
-    .WPContainer{
+@media screen and (max-width: 768px) {
+    .WPContainer {
         display: none;
     }
 }
-
 
 .wallpaperadmin {
     height: 100%;
@@ -101,4 +101,4 @@
     padding: 12px 16px;
     border-radius: 5px;
     color: #D00C1A;
-  }
+}
