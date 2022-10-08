@@ -3,141 +3,142 @@
 // import Dashboard from '../features/dashboard';
 // import "../styles/NavandSideBar.css";
 
-// // function checkToken() {
-// //     isAccessToken: true : false
-// // }
+// <<<<<<< HEAD
+// function checkToken () {
+//     isAccessToken: true : false
+// }
 
-// // const GetMyTable = () => {
-// //     const data = [
-// //         {
-// //             id: 1,
-// //             car: 'Mercedez Benz',
-// //             user_email: 'wg@creative.org',
-// //             start_rent: '2022-01-26',
-// //             finish_rent: '2022-02-02',
-// //             price: 500000,
-// //             category: '4-6 orang'
-// //         },
-// //         {
-// //             id: 2,
-// //             car: 'Suzuki Xpander',
-// //             user_email: 'jwalters@creative.org',
-// //             start_rent: '2022-06-14',
-// //             finish_rent: '2022-02-02',
-// //             price: 500000,
-// //             category: '4-6 orang'
-// //         },
-// //         {
-// //             id: 3,
-// //             car: 'Porsche',
-// //             user_email: 'bbanner@creative.org',
-// //             start_rent: '2012-06-20',
-// //             finish_rent: '2022-02-02',
-// //             price: 500000,
-// //             category: '4-6 orang'
-// //         }
-// //         // ...
-// //     ];
+// const GetMyTable = () => {
+//     const data = [
+//         {
+//             id: 1,
+//             car: 'Mercedez Benz',
+//             user_email: 'wg@creative.org',
+//             start_rent: '2022-01-26',
+//             finish_rent: '2022-02-02',
+//             price: 500000,
+//             category: '4-6 orang'
+//         },
+//         {
+//             id: 2,
+//             car: 'Suzuki Xpander',
+//             user_email: 'jwalters@creative.org',
+//             start_rent: '2022-06-14',
+//             finish_rent: '2022-02-02',
+//             price: 500000,
+//             category: '4-6 orang'
+//         },
+//         {
+//             id: 3,
+//             car: 'Porsche',
+//             user_email: 'bbanner@creative.org',
+//             start_rent: '2012-06-20',
+//             finish_rent: '2022-02-02',
+//             price: 500000,
+//             category: '4-6 orang'
+//         }
+//         // ...
+//     ];
 
-// //     const [tableData, setTableData] = useState(data);
+//     const [tableData, setTableData] = useState(data);
 
-// //     const columns = [
-// //         { label: 'Car', field: 'car' },
-// //         { label: 'User Email', field: 'user_email' },
-// //         { label: 'Start Rent', field: 'start_rent' },
-// //         { label: 'Finish Rent', field: 'finish_rent' },
-// //         { label: 'Price', field: 'price' },
-// //         { label: 'Category', field: 'category' }
-// //     ];
+//     const columns = [
+//         { label: 'Car', field: 'car' },
+//         { label: 'User Email', field: 'user_email' },
+//         { label: 'Start Rent', field: 'start_rent' },
+//         { label: 'Finish Rent', field: 'finish_rent' },
+//         { label: 'Price', field: 'price' },
+//         { label: 'Category', field: 'category' }
+//     ];
 
-// //     return (
-// //         <>
-// //             <Table hover bordered>
-// //                 <thead>
-// //                     <tr style={{ backgroundColor: '#CFD4ED' }}>
-// //                         {columns.map(column => {
-// //                             return <th key={column.field}>{column.label}</th>;
-// //                         })}
-// //                     </tr>
-// //                 </thead>
-// //                 <tbody>
-// //                     {tableData.map((data, i) => {
-// //                         return (
-// //                             <tr key={i}>
-// //                                 {columns.map((column, j) => {
-// //                                     const value = data[column.field] || '-';
-// //                                     return <td key={column.field + j}>{value}</td>;
-// //                                 })}
-// //                             </tr>
-// //                         );
-// //                     })}
+//     return (
+//         <>
+//             <Table hover bordered>
+//                 <thead>
+//                     <tr style={{ backgroundColor: '#CFD4ED' }}>
+//                         {columns.map(column => {
+//                             return <th key={column.field}>{column.label}</th>;
+//                         })}
+//                     </tr>
+//                 </thead>
+//                 <tbody>
+//                     {tableData.map((data, i) => {
+//                         return (
+//                             <tr key={i}>
+//                                 {columns.map((column, j) => {
+//                                     const value = data[column.field] || '-';
+//                                     return <td key={column.field + j}>{value}</td>;
+//                                 })}
+//                             </tr>
+//                         );
+//                     })}
 
-// //                     <tr>
-// //                         <td>{/* ... */}</td>
-// //                     </tr>
-// //                 </tbody>
-// //             </Table>
-// //         </>
-// //     );
-// // };
+//                     <tr>
+//                         <td>{/* ... */}</td>
+//                     </tr>
+//                 </tbody>
+//             </Table>
+//         </>
+//     );
+// };
 
-// // const TablePagination = () => {
-// //     console.log([...Array(10).keys()]);
-// //     return (
-// //         <Pagination>
-// //             <PaginationItem>
-// //                 <PaginationLink first href="#" />
-// //             </PaginationItem>
-// //             <PaginationItem>
-// //                 <PaginationLink previous href="#" />
-// //             </PaginationItem>
-// //             {[...Array(10).keys()].map(num => {
-// //                 return (
-// //                     <PaginationItem>
-// //                         <PaginationLink href="#">{num + 1}</PaginationLink>
-// //                     </PaginationItem>
-// //                 );
-// //             })}
+// const TablePagination = () => {
+//     console.log([...Array(10).keys()]);
+//     return (
+//         <Pagination>
+//             <PaginationItem>
+//                 <PaginationLink first href="#" />
+//             </PaginationItem>
+//             <PaginationItem>
+//                 <PaginationLink previous href="#" />
+//             </PaginationItem>
+//             {[...Array(10).keys()].map(num => {
+//                 return (
+//                     <PaginationItem>
+//                         <PaginationLink href="#">{num + 1}</PaginationLink>
+//                     </PaginationItem>
+//                 );
+//             })}
 
-// //             <PaginationItem>
-// //                 <PaginationLink href="#" next />
-// //             </PaginationItem>
-// //             <PaginationItem>
-// //                 <PaginationLink href="#" last />
-// //             </PaginationItem>
-// //         </Pagination>
-// //     );
-// // };
+//             <PaginationItem>
+//                 <PaginationLink href="#" next />
+//             </PaginationItem>
+//             <PaginationItem>
+//                 <PaginationLink href="#" last />
+//             </PaginationItem>
+//         </Pagination>
+//     );
+// };
 
-// // export default class Dashboard extends React.Component {
-// //     constructor(props) {
-// //         super(props);
-// //         this.state = { data: [] };
-// //     }
+// export default class Dashboard extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = { data: [] };
+//     }
 
-// //     componentDidMount() {
-// //         this.getData();
-// //     }
+//     componentDidMount() {
+//         this.getData();
+//     }
 
-// //     async getOrders() {
-// //         await axios
-// //             .get('https://bootcamp-rent-car.herokuapp.com/admin/order')
-// //             .then(response => {
-// //                 const orders = response.data;
+//     async getOrders() {
+//         await axios
+//             .get('https://bootcamp-rent-car.herokuapp.com/admin/order')
+//             .then(response => {
+//                 const orders = response.data;
 
-// //                 this.setState({
-// //                     data: [...orders]
-// //                 });
-// //                 console.log(response);
-// //             })
-// //             .catch(err => console.error(err));
-// //     }
+//                 this.setState({
+//                     data: [...orders]
+//                 });
+//                 console.log(response);
+//             })
+//             .catch(err => console.error(err));
+//     }
 
-// //     getData = (page = '', size = 10, fromDate = '', toDate = '') => {
-// //         // document.getElementById('size').value = size;
-// //         // document.getElementById('page').value = page;
+//     getData = (page = '', size = 10, fromDate = '', toDate = '') => {
+//         // document.getElementById('size').value = size;
+//         // document.getElementById('page').value = page;
 
-// this.getOrders();
+//         this.getOrders();
 // =======
 // const DashboardPage = () => {
 //   const navigate = useNavigate();
@@ -148,10 +149,10 @@
 //     if(isLoggedIn === false){
 //       alert('belum login');
 //       navigate('/');
+// >>>>>>> c87d13ef19671d5b36ce2791ebfb47bc54cc0aad
 //     };
 
 //   }, [isLoggedIn])
-
 
 //   return(
 //     <div className="Dashboard">
@@ -178,10 +179,7 @@
 //         </div>
 //       </div>
 
-
-
 //     </div>
 //   )
 // };
 // export default DashboardPage
-// >>>>>>> ddaf18c89cef02e9117b2384d58819fddc59a147

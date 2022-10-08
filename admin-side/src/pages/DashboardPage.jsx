@@ -4,20 +4,25 @@ import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import DataTable from 'react-data-table-component';
 import { Input, Label } from 'reactstrap';
+import NavSideBar from '../features/NavSideBar';
+import './../styles/Dashboard.css';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-const DashboardPage = () => {
+const DashboardContent = () => {
   const [orders, setOrders] = useState([]);
   const [barOrders, setBarOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const controller = new AbortController();
 
   const loadOrders = async () => {
+    setLoading(true);
     await axios
-      .get('https://bootcamp-rent-car.herokuapp.com/admin/order')
+      .get('https://bootcamp-rent-car.herokuapp.com/admin/order', { signal: controller.signal })
       .then(response => {
         setOrders(response.data);
-        handleChangeMonth(new Date().getMonth());
-        console.log(response);
+        handleChangeMonth(new Date().getMonth(), response.data);
       })
       .catch(err => console.error(err));
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -28,9 +33,7 @@ const DashboardPage = () => {
     const dataObjectListByDate = [];
     for (let i = 1; i <= 31; i++) {
       const dataObjectByDate = { x: i.toString(), y: 0 };
-      const dataDates = barOrders.filter(
-        order => new Date(order.start_rent_at).getDate() === i || new Date(order.finish_rent_at).getDate() === i
-      );
+      const dataDates = barOrders.filter(order => new Date(order.start_rent_at).getDate() === i);
       dataObjectByDate.y = dataDates.length;
 
       dataObjectListByDate.push(dataObjectByDate);
@@ -38,12 +41,10 @@ const DashboardPage = () => {
     return dataObjectListByDate;
   };
 
-  const handleChangeMonth = month => {
-    console.log(month);
-    const barOrders = orders.filter(
+  const handleChangeMonth = (month, dataList) => {
+    const barOrders = (dataList || orders).filter(
       order =>
-        (new Date(order.start_rent_at).getMonth() === month || new Date(order.finish_rent_at).getMonth() === month) &&
-        (new Date(order.start_rent_at).getFullYear() === 2022 || new Date(order.finish_rent_at).getFullYear() === 2022)
+        new Date(order.start_rent_at).getMonth() === month && new Date(order.start_rent_at).getFullYear() === 2022
     );
     setBarOrders(barOrders);
   };
@@ -66,7 +67,8 @@ const DashboardPage = () => {
       },
       title: {
         display: true,
-        text: 'Rented Car Data Visualization'
+        text: 'Date',
+        position: 'bottom'
       }
     }
   };
@@ -103,6 +105,14 @@ const DashboardPage = () => {
       <div className="container">
         <div className="row">
           <div className="col-3">
+            <div className="d-flex">
+              <div className="title-square"></div>
+              <p className="dashboard-title">Rented Car Data Visualization</p>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-3">
             <Label for="exampleSelect">Month</Label>
             <Input
               id="exampleSelect"
@@ -136,18 +146,30 @@ const DashboardPage = () => {
         </div>
         <div className="row">
           <div className="col">
-            <Bar options={barOptions} data={barData}></Bar>
+            {loading && <p className="text-center">Getting order data...</p>}
+            {!loading && <Bar style={{ background: '#f4f5f7' }} options={barOptions} data={barData}></Bar>}
           </div>
         </div>
 
         <div className="row">
-          <div className="col">
-            <DataTable columns={columns} data={orders} pagination></DataTable>
+          <div className="col-3">
+            <div className="table-dashboard-text">Dashboard</div>
+            <div className="d-flex">
+              <div className="title-square"></div>
+              <p className="dashboard-title">List Order</p>
+            </div>
           </div>
+        </div>
+        <div className="row">
+          <div className="col">{!loading && <DataTable columns={columns} data={orders} pagination></DataTable>}</div>
         </div>
       </div>
     </>
   );
+};
+
+const DashboardPage = () => {
+  return <NavSideBar PageContent={DashboardContent} />;
 };
 
 export default DashboardPage;

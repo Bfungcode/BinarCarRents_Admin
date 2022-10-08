@@ -1,23 +1,25 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Toast, ToastBody } from 'reactstrap';
+import NavSideBar from '../features/NavSideBar';
 import SVGClock from '../vectors/svg-clock';
 import SVGUser from '../vectors/svg-user';
 import './../styles/Cars.css';
 
-const Cars = () => {
-  const [cars, setCars] = useState([]);
+const CarsContent = () => {
+  const [cars, setCars] = useState([]); // cars keseluruhan
+  const [filteredCars, setFilteredCars] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const [id, setId] = useState({});
-
+  const [toastSave, setToastSave] = useState(false);
+  const [toastDelete, setToastDelete] = useState(false);
   const controller = new AbortController();
 
-  // const toggle = id => {
-  //   if (id) setId(id);
-  //   setModal(!modal);
-  // };
+  const toggle = () => {
+    setModal(!modal);
+  };
 
   const loadCars = async () => {
     setLoading(true);
@@ -25,15 +27,25 @@ const Cars = () => {
       const { data } = await axios.get('https://bootcamp-rent-car.herokuapp.com/admin/car', {
         signal: controller.signal
       });
+      data.sort((a, b) => b.id - a.id);
       setCars(data);
+      setFilteredCars(data);
     } catch (error) {
       console.error(error);
     }
     setLoading(false);
   };
 
+  const showToastSave = () => {
+    const responseStatus = localStorage.getItem('responseStatus');
+    setToastSave(!!responseStatus);
+    setTimeout(() => setToastSave(false), 4000);
+    localStorage.removeItem('responseStatus');
+  };
+
   useEffect(() => {
     loadCars();
+    showToastSave();
   }, []);
 
   const doDelete = async () => {
@@ -42,14 +54,22 @@ const Cars = () => {
       .then(response => {
         console.log(response);
         if (response.statusText === 'OK') {
-          alert(response.data.name);
           loadCars();
+          setToastDelete(true);
+          setTimeout(() => {
+            setToastDelete(false);
+          }, 4000);
         } else alert('delete error');
       })
       .catch(error => {
         console.error(error);
       });
-    // toggle();
+    setModal(false);
+  };
+
+  const doFilterCars = category => {
+    const filteredCars = cars.filter(car => car.category === category);
+    setFilteredCars(filteredCars);
   };
 
   return (
@@ -67,21 +87,53 @@ const Cars = () => {
             </Link>
           </div>
         </div>
+        {/* toast save success */}
+        {toastSave && (
+          <div className="row">
+            <div className="col d-grid justify-content-center">
+              <Toast isOpen={toastSave} fade>
+                <ToastBody>Data Berhasil Disimpan</ToastBody>
+              </Toast>
+            </div>
+          </div>
+        )}
+
+        {/* toast delete success */}
+        {toastDelete && (
+          <div className="row">
+            <div className="col d-grid justify-content-center">
+              <Toast isOpen={toastDelete} fade>
+                <ToastBody>Data Berhasil Dihapus</ToastBody>
+              </Toast>
+            </div>
+          </div>
+        )}
+
         <div className="row">
           <div className="d-flex" style={{ columnGap: '1rem' }}>
-            <Button className="btn-light">All</Button>
-            <Button className="btn-light">2 - 4 people</Button>
-            <Button className="btn-light">4 - 6 people</Button>
-            <Button className="btn-light">6 - 8 people</Button>
+            <Button className="btn-light" onClick={() => setFilteredCars(cars)}>
+              All
+            </Button>
+            <Button className="btn-light" onClick={() => doFilterCars('2 - 4 orang')}>
+              2 - 4 people
+            </Button>
+            <Button className="btn-light" onClick={() => doFilterCars('4 - 6 orang')}>
+              4 - 6 people
+            </Button>
+            <Button className="btn-light" onClick={() => doFilterCars('6 - 8 orang')}>
+              6 - 8 people
+            </Button>
           </div>
         </div>
 
         <div className="car-result row">
           {loading && <p className="text-center">Getting cars data...</p>}
-          {!loading && (!cars || cars.length === 0) && <p className="text-center">No data available.</p>}
+          {!loading && (!filteredCars || filteredCars.length === 0) && (
+            <p className="text-center">No data available.</p>
+          )}
           {!loading &&
-            cars.length > 0 &&
-            cars.map((car, index) => {
+            filteredCars.length > 0 &&
+            filteredCars.map((car, index) => {
               return (
                 <div key={index} className="car-item">
                   {/* col-lg-4 col-md-6 col-sm-12 */}
@@ -115,7 +167,10 @@ const Cars = () => {
                   </div>
                   <div className="d-flex" style={{ justifyContent: 'space-evenly' }}>
                     <Button
-                      // onClick={() => toggle(car.id)}
+                      onClick={() => {
+                        setId(car.id);
+                        toggle();
+                      }}
                       className="btn-light btn-outline-danger"
                       key={'del-' + index}
                     >
@@ -133,7 +188,7 @@ const Cars = () => {
         </div>
 
         {/* modal confirmation delete */}
-        {/* <Modal isOpen={modal} toggle={toggle} backdrop="static">
+        <Modal isOpen={modal} backdrop="static">
           <ModalBody className="d-grid" style={{ justifyItems: 'center' }}>
             <img src="./img/img-BeepBeep.png" alt="car-delete" width={153} />
             <p>
@@ -149,10 +204,14 @@ const Cars = () => {
               Tidak
             </Button>
           </ModalFooter>
-        </Modal> */}
+        </Modal>
       </div>
     </>
   );
+};
+
+const Cars = () => {
+  return <NavSideBar PageContent={CarsContent} />;
 };
 
 export default Cars;
