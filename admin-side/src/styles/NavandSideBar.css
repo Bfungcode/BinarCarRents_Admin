@@ -1,70 +1,73 @@
-.Dashboard{
-  display: grid;
-  height: 100vh;
-  left: 0;
-  right: 0;
-  gap: 0;
-  margin: 0;
-  grid-template-columns: auto 1fr;
-}
-.logo{
-  height: 34px;
+.Dashboard {
+    width: 100%;
+    display: grid;
+    height: 100vh;
+    left: 0;
+    right: 0;
+    gap: 0;
+    margin: 0;
+    grid-template-columns: auto 1fr;
 }
 
-.search-button{
-  width: 71px;
-  height: 36px;
-  border: 1px solid #0D28A6;
-  border-radius: 2px;
-  color: #0D28A6;
-  text-align: center;
-  font-size: 14px;
+.logo {
+    height: 34px;
 }
 
+.search-button {
+    width: 71px;
+    height: 36px;
+    border: 1px solid #0D28A6;
+    border-radius: 2px;
+    color: #0D28A6;
+    text-align: center;
+    font-size: 14px;
+}
 
 .right-layout {
-  display: grid;
-  padding-top: 18;
-  grid-template-rows: auto 1fr;
-  height: 70px;
-  background: white;
-  box-sizing: border-box;
+    display: grid;
+    padding-top: 18;
+    grid-template-rows: auto 1fr;
+    height: 70px;
+    background: white;
+    box-sizing: border-box;
 }
 
-.h-navbar{
-  display: grid;
-  grid-template-columns: auto auto 1fr auto auto;
+
+/* .h-navbar {
+    display: flex;
+    grid-template-columns: auto auto 1fr auto auto;
+} */
+
+.acct-icon {
+    height: 38px;
+    width: 38px;
+    border: none;
+    border-radius: 19px;
+    background-color: #CFD4ED;
+    color: black;
+    text-align: center;
 }
 
-.acct-icon{
-  height: 38px;
-  width: 38px;
-  border: none;
-  border-radius: 19px;
-  background-color: #CFD4ED;
-  color: black;
-  text-align: center;
+.sidebar-content {
+    display: grid;
+    grid-template-columns: auto 1fr;
 }
 
-.sidebar-content{
-  display: grid;
-  grid-template-columns: auto 1fr;
-}
-.main-sidebar{
-  text-align: center;
-  height: 100%;
-  background: #0D28A6;
-  color: #FFF;
-  width: 70px;
+.main-sidebar {
+    text-align: center;
+    height: 100%;
+    background: #0D28A6;
+    color: #FFF;
+    width: 70px;
 }
 
-.sidebar{
-  height: 100%;
-  background: #FFF;
-  color: black;
-  width: 220px;
+.sidebar {
+    height: 100%;
+    background: #FFF;
+    color: black;
+    width: 220px;
 }
-.content{
-  height: 100%;
-  
+
+.content {
+    height: 100%;
 }

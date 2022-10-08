@@ -1,17 +1,22 @@
+import React from 'react';
 import axios from 'axios';
+import './../styles/Dashboard.css';
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
 import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import DataTable from 'react-data-table-component';
 import { Input, Label } from 'reactstrap';
 import NavSideBar from '../features/NavSideBar';
-import './../styles/Dashboard.css';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 const DashboardContent = () => {
   const [orders, setOrders] = useState([]);
   const [barOrders, setBarOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const controller = new AbortController();
+  const { isLoggedIn } = useSelector((state) => state.auth)
+  const navigate = useNavigate();
 
   const loadOrders = async () => {
     setLoading(true);
@@ -28,6 +33,12 @@ const DashboardContent = () => {
   useEffect(() => {
     loadOrders();
   }, []);
+
+  React.useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/');
+    }
+  }, [!isLoggedIn])
 
   const getBarData = () => {
     const dataObjectListByDate = [];
@@ -91,9 +102,9 @@ const DashboardContent = () => {
       selector: row =>
         row.Car?.price
           ? row.Car?.price.toLocaleString('id-ID', {
-              style: 'currency',
-              currency: 'IDR'
-            })
+            style: 'currency',
+            currency: 'IDR'
+          })
           : '-',
       sortable: true
     },

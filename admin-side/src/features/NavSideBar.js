@@ -12,7 +12,6 @@ const NavSideBar = ({ PageContent }) => {
       </div>
       <div className="h-navbar">
         <div className="logo">Binar-Car</div>
-
         <div className="sidebar-content">
           <div className="sidebar">
             <ul>

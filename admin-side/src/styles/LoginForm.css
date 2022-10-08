@@ -8,9 +8,8 @@
     height: 100vh;
     left: 0;
     display: grid;
-    grid-template-columns: 65% 35%;
+    grid-template-columns: 65% 30%;
     justify-content: start;
-    grid-template-columns: 80%, 20%;
     background: #FFF;
 }
 

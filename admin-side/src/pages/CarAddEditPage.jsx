@@ -1,3 +1,5 @@
+import React from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
@@ -10,10 +12,9 @@ const CarAddEditPage = () => {
   const [isAdd, setIsAdd] = useState(false);
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
-  // const [car, setCar] = useState({});
   const [error, setError] = useState('');
   const controller = new AbortController();
-
+  const { isLoggedIn } = useSelector((state) => state.auth)
   const navigate = useNavigate();
 
   const handleSubmit = async (values, actions) => {
@@ -78,6 +79,12 @@ const CarAddEditPage = () => {
       loadCar();
     }
   }, []);
+
+  React.useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/');
+    }
+  }, [!isLoggedIn])
 
   const formik = useFormik({
     initialValues: {

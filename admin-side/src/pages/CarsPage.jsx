@@ -1,6 +1,8 @@
+import React from 'react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Modal, ModalBody, ModalFooter, Toast, ToastBody } from 'reactstrap';
 import NavSideBar from '../features/NavSideBar';
 import SVGClock from '../vectors/svg-clock';
@@ -16,6 +18,8 @@ const CarsContent = () => {
   const [toastSave, setToastSave] = useState(false);
   const [toastDelete, setToastDelete] = useState(false);
   const controller = new AbortController();
+  const { isLoggedIn } = useSelector((state) => state.auth)
+  const navigate = useNavigate();
 
   const toggle = () => {
     setModal(!modal);
@@ -47,6 +51,12 @@ const CarsContent = () => {
     loadCars();
     showToastSave();
   }, []);
+
+  React.useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/');
+    }
+  }, [!isLoggedIn])
 
   const doDelete = async () => {
     await axios
