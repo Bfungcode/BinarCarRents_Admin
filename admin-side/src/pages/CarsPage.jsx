@@ -5,7 +5,7 @@ import { Button, Modal, ModalBody, ModalFooter, Toast, ToastBody } from 'reactst
 import NavSideBar from '../features/NavSideBar';
 import SVGClock from '../vectors/svg-clock';
 import SVGUser from '../vectors/svg-user';
-import './../styles/Cars.css';
+import './../styles/cars.css';
 
 const CarsContent = () => {
   const [cars, setCars] = useState([]); // cars keseluruhan

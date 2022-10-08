@@ -3,8 +3,9 @@ import CarAddEditPage from './pages/CarAddEditPage';
 import Cars from './pages/CarsPage';
 import DashboardPage from './pages/DashboardPage';
 import LoginPage from './pages/LoginPage';
-import './styles/Cars.css';
+import './styles/cars.css';
 import './styles/LoginForm.css';
+import { Routes, Route } from 'react-router-dom';
 
 const App = () => {
   return (
