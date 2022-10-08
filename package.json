@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.8.5",
+    "formik": "^2.2.9",
+    "react-redux": "^8.0.4",
+    "yup": "^0.32.11"
+  }
+}

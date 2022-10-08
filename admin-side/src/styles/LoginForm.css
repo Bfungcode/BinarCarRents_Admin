@@ -14,11 +14,23 @@
     background: #FFF;
 }
 
+@media screen and (max-width: 1024px) {
+    .maincontainer {
+        grid-template-columns: 50% 50%;
+    }
+}
+
 .WPContainer {
     background: #0D28A6;
     padding: 0;
     height: 100%;
     padding-left: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .WPContainer {
+        display: none;
+    }
 }
 
 .wallpaperadmin {
@@ -35,7 +47,6 @@
     padding-left: 5%;
     height: 100%;
     width: 100%;
-    top: 0;
     display: flex;
     justify-content: center;
     background-color: #FFFFFF;

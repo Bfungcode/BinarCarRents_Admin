@@ -1,3 +1,9 @@
+import './styles/cars.css'
+import { Route, Routes } from 'react-router-dom'
+import Cars from './pages/cars';
+import LoginPage from './pages/LoginPage';
+import DashboardPage from './pages/dashboard';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import CarAddEditPage from './pages/CarAddEditPage';
 import Cars from './pages/CarsPage';
