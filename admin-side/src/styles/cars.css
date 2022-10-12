@@ -1,30 +1,30 @@
 .car-result {
-    margin-top: 3rem;
-    margin-left: 10%;
-    margin-right: 10%;
-    /* display: grid;
+  margin-top: 3rem;
+  margin-left: 10%;
+  margin-right: 10%;
+  /* display: grid;
     grid-template-columns: repeat(3, auto); */
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 2rem 24px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2rem 24px;
 }
 
 .car-item {
-    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
-    padding: 24px;
-    /* max-width: 32%; */
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 24px;
+  background-color: white;
+  /* max-width: 32%; */
 }
 
 @media screen and (min-width: 992px) {
-    .car-item {
-        max-width: 31%;
-    }
+  .car-item {
+    max-width: 31%;
+  }
 }
-
 
 /* @media screen and (min-width: 768) and (max-width: 991px) {
     .car-item {
@@ -33,26 +33,66 @@
   } */
 
 .car-img {
-    max-height: 160px;
-    /* max-width: 270px; */
-    /* max-width: 14rem; */
-    max-width: -webkit-fill-available;
-    padding: 1rem;
+  max-height: 160px;
+  /* max-width: 270px; */
+  /* max-width: 14rem; */
+  max-width: -webkit-fill-available;
+  padding: 1rem;
 }
 
 .car-img-notfound {
-    /* background-image: url('/public/img/no-image-icon.webp'); */
-    height: 160px;
-    width: 270px;
+  /* background-image: url('/public/img/no-image-icon.webp'); */
+  height: 160px;
+  width: 270px;
 }
 
 .btn-choose-car {
-    background-color: #5cb85f;
-    border-color: #5cb85f;
-    width: 100%;
-    border-radius: 2px;
+  background-color: #5cb85f;
+  border-color: #5cb85f;
+  width: 100%;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+.btn-delete-car {
+  background-color: #ffffff;
+  color: #fa2c5a;
+  border: 1px solid #fa2c5a;
+  width: 100%;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+.btn-car-flex {
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-action-group {
+  grid-template-columns: auto auto;
+  column-gap: 16px;
 }
 
 .car-text-bold {
-    font-weight: 600;
+  font-weight: 600;
+}
+
+.btn-add-new {
+  background-color: #0d28a6;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+.btn-category {
+  background-color: #ffffff;
+  border: 1px solid #aeb7e1;
+  border-radius: 2px;
+  color: #aeb7e1;
+}
+
+.btn-category.active-ct {
+  background-color: #cfd4ed;
+  border: 1px solid #0d28a6;
+  border-radius: 2px;
+  color: #0d28a6;
 }

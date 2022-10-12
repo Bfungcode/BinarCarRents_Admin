@@ -1,8 +1,7 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Col, Form, FormGroup, FormText, Input, Label } from 'reactstrap';
 import * as Yup from 'yup';
@@ -14,7 +13,7 @@ const CarAddEditPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const controller = new AbortController();
-  const { isLoggedIn } = useSelector((state) => state.auth)
+  const { isLoggedIn } = useSelector(state => state.auth);
   const navigate = useNavigate();
 
   const handleSubmit = async (values, actions) => {
@@ -23,7 +22,9 @@ const CarAddEditPage = () => {
     if (id) {
       /** edit */
       await axios
-        .put(`https://bootcamp-rent-car.herokuapp.com/admin/car/${id}`, values)
+        .put(`https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`, values, {
+          headers: { access_token: localStorage.getItem('access_token') }
+        })
         .then(response => {
           console.log(response);
           actions.setSubmitting(false);
@@ -40,7 +41,9 @@ const CarAddEditPage = () => {
     } else {
       /** add new */
       await axios
-        .post(`https://bootcamp-rent-car.herokuapp.com/admin/car`, values)
+        .post(`https://bootcamp-rent-cars.herokuapp.com/admin/car`, values, {
+          headers: { access_token: localStorage.getItem('access_token') }
+        })
         .then(response => {
           console.log(response);
           actions.setSubmitting(false);
@@ -60,8 +63,9 @@ const CarAddEditPage = () => {
   const loadCar = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get('https://bootcamp-rent-car.herokuapp.com/admin/car/' + id, {
-        signal: controller.signal
+      const { data } = await axios.get('https://bootcamp-rent-cars.herokuapp.com/admin/car/' + id, {
+        signal: controller.signal,
+        headers: { access_token: localStorage.getItem('access_token') }
       });
       formik.setFieldValue('name', data?.name || '');
       formik.setFieldValue('price', data?.price || '');
@@ -84,7 +88,7 @@ const CarAddEditPage = () => {
     if (!isLoggedIn) {
       navigate('/');
     }
-  }, [!isLoggedIn])
+  }, [!isLoggedIn]);
 
   const formik = useFormik({
     initialValues: {
@@ -112,7 +116,7 @@ const CarAddEditPage = () => {
 
   return (
     <>
-      <div className="container mt-3">
+      <div className="container mt-3" style={{ backgroundColor: '#F4F5F7' }}>
         {error && <p>Error! {error}</p>}
         {/* {console.log(formik.errors)} */}
         <div className="row">
@@ -193,9 +197,6 @@ const CarAddEditPage = () => {
                         <option value={'small'}>small</option>
                         <option value={'medium'}>medium</option>
                         <option value={'large'}>large</option>
-                        <option value={'2 - 4 orang'}>2 - 4 orang</option>
-                        <option value={'4 - 6 orang'}>4 - 6 orang</option>
-                        <option value={'6 - 8 orang'}>6 - 8 orang</option>
                       </Input>
                       {formik.touched.category && formik.errors.category && (
                         <p className="text-danger"> {formik.errors.category} </p>
