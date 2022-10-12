@@ -5,18 +5,40 @@ const NavSideBar = ({ PageContent }) => {
     <div className="Dashboard">
       <div className="main-sidebar">
         <div className="logo"> logo</div>
-        <div> icon1</div>
-        <p>subtitle</p>
-        <div> icon2</div>
-        <p>subtitle</p>
+        <div className="icon-dashboard">
+          {/* <SVGDashboard/>  */}
+          <p>Dashboard</p>
+        </div>
+        <div>
+          {/* <SVGTruck />  */}
+          <p>Cars</p>
+        </div>
       </div>
-      <div className="h-navbar">
-        <div className="logo">Binar-Car</div>
+      <div className="right-layout">
+        <div className="h-navbar">
+          <div className="logo">Binar-Car</div>
+          {/* <div> <SVGMenu /> </div> */}
+          <div className="searchbar">
+            <div class="input-group">
+              <div class="form-outline">
+                <input type="search" id="form1" class="form-control" placeholder="Search" />
+                <label class="form-label"></label>
+              </div>
+              <div className="search-button">Search</div>
+            </div>
+          </div>
+          <div>
+            <div className="acct-icon">U</div>
+            <p>Unis Badri</p>
+          </div>
+          {/* <div><SVGDropdownMenu /> </div> */}
+        </div>
+
         <div className="sidebar-content">
           <div className="sidebar">
             <ul>
-              <li>title1</li>
-              <li>title2</li>
+              <li>CARS</li>
+              <li>List Car</li>
             </ul>
           </div>
           <PageContent />
