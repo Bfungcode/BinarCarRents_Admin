@@ -84,9 +84,7 @@ const LoginForm = () => {
                             className="fieldInput"
                         />
                     </div>
-                    {formik.touched.email && formik.errors.email ? (
-                        <div style={{ color: "red" }} > {formik.errors.email}</div>
-                    ) : null}
+                    
 
                     <label className="label">Password</label>
                     <div>

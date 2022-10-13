@@ -7,10 +7,40 @@
   margin: 0;
   grid-template-columns: auto 1fr;
 }
-.logo{
-  height: 34px;
-}
 
+/* Navbar */
+
+.nav-logo{
+  height: 34px;
+  width: 100px;
+  background: #CFD4ED;
+  color: black;
+  font-weight: 700;
+  font-family: 'Arial';
+  text-align: center;
+  padding-top: 6px;
+  margin-left: 24px;
+  margin-right: 100px;
+}
+.searchbar{
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+}
+.search-input{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: center;
+  border: solid 1px black;
+  padding-left: 5px;
+  width: 174px;
+}
+.search-input > input {
+  border: none;
+  outline: none;
+  padding-left: 10px;
+}
 .search-button{
   width: 71px;
   height: 36px;
@@ -19,7 +49,83 @@
   color: #0D28A6;
   text-align: center;
   font-size: 14px;
+  font-weight: 700;
+  padding-top: 8px;
 }
+.search-button:hover{
+  cursor: pointer;
+  background: #CFD4ED;
+  color: white;
+}
+
+.acct-group{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 16px;
+  column-gap: 8px;
+  align-items: center;
+ 
+}
+.acct-icon{
+  height: 38px;
+  width: 38px;
+  border: none;
+  border-radius: 19px;
+  background-color: #CFD4ED;
+  color: black;
+  text-align: center;
+  padding: 8px;
+  font-weight: 700;
+}
+.acct-name{
+  font-family: Arial;
+  font-size: 14px;
+}
+
+
+/* sidebar */
+.square-logo{
+  width: 34px;
+  height: 34px;
+  background: #CFD4ED;
+  color: black;
+  font-weight: 700;
+  margin: 18px;
+  margin-bottom: 30px;
+  border: none;
+  padding: 6px;
+}
+
+.icon-dashboard{
+  padding-top: 10px;
+  height: 64px;
+}
+.icon-dashboard > p{
+  font-size: 12px;
+  font-family: 'Arial';
+}
+.icon-dashboard:hover{
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  font-weight: 700;
+  }
+
+.icon-cars{
+  height: 64px;
+  padding-top: 10px;
+}
+.icon-cars > p {
+  font-size: 12px;
+  font-family: 'Arial';
+}
+
+.icon-cars:hover{
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  font-weight: 700;
+  }
+
+
 
 
 .right-layout {
@@ -34,17 +140,14 @@
 .h-navbar{
   display: grid;
   grid-template-columns: auto auto 1fr auto auto;
+  align-items: center;
+  background-color: #fff;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+  padding-right: 10px;
+  /* padding-right: sementara; */
 }
 
-.acct-icon{
-  height: 38px;
-  width: 38px;
-  border: none;
-  border-radius: 19px;
-  background-color: #CFD4ED;
-  color: black;
-  text-align: center;
-}
 
 .sidebar-content{
   display: grid;
@@ -62,9 +165,29 @@
   height: 100%;
   background: #FFF;
   color: black;
+  box-sizing: border-box;
   width: 220px;
+  padding-top: 32px;
 }
+#menu{
+  padding: 11px 24px;
+  color: #8A8A8A;
+  line-height: 20px;
+  font-size: 14px;
+  height: 42px;
+}
+
+#menu:hover{
+  background-color: #CFD4ED;
+  font-weight: 700;
+  color: black;
+}
+
 .content{
   height: 100%;
   
+}
+
+.dropdown:hover{
+  cursor: pointer;
 }

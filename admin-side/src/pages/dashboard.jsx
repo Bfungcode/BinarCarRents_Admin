@@ -8,6 +8,7 @@ import {
   SVGTruck,
   SVGMenu,
   SVGDropdownMenu,
+  SVGSearch,
 } from "../vectors/navandsidebar-icon";
 
 const DashboardPage = () => {
@@ -29,12 +30,12 @@ const DashboardPage = () => {
 
     <div className="main-sidebar">
       
-        <div className="logo"> logo</div>
+        <div className="square-logo"> BR</div>
         <div className='icon-dashboard'> 
           <SVGDashboard/> 
           <p>Dashboard</p>
         </div>
-        <div> 
+        <div className='icon-cars'> 
           <SVGTruck /> 
           <p>Cars</p>
         </div>
@@ -42,12 +43,16 @@ const DashboardPage = () => {
     </div>
     <div className="right-layout">
       <div className='h-navbar'>
-        <div className="logo">Binar-Car</div>
+        <div className="nav-logo">Binar-Car</div>
         <div> <SVGMenu /> </div>
         <div className='searchbar'>
-          <div class="input-group">
-            <div class="form-outline">
-              <input type="search" id="form1" class="form-control" placeholder='Search'/>
+          <div class="input-group searchbar">
+            <div class="form-outline search-input">
+              <span>
+                <SVGSearch />
+              </span>
+              <input type="search" id="form1" placeholder="Search"
+              />
               <label class="form-label"></label>
             </div>
             <div className='search-button'>
@@ -55,20 +60,18 @@ const DashboardPage = () => {
             </div>
           </div>
       </div>
-        <div>
+        <div className='acct-group'>
 
           <div className='acct-icon'>U</div>
-          <p>Unis Badri</p>
+          <div className='acct-name'>Unis Badri</div>
         </div>
-        <div><SVGDropdownMenu /> </div>
+        <div className='dropdown'><SVGDropdownMenu /> </div>
       </div>
 
     <div className="sidebar-content">
       <div className="sidebar">
-        <ul>
-          <li>CARS</li>
-          <li>List Car</li>
-        </ul>
+        <div id='menu'>DASHBOARD</div>
+        <div id='menu'>Dashboard</div>
       </div>
         <Dashboard />
       </div>  
