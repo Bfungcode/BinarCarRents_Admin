@@ -1,63 +1,92 @@
-import React from 'react';
+import { faPencil } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import './../styles/Dashboard.css';
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
-import { useEffect, useState } from 'react';
+import Moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import DataTable from 'react-data-table-component';
-import { Input, Label } from 'reactstrap';
-import NavSideBar from '../features/NavSideBar';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Button, Input, Label } from 'reactstrap';
+import NavSideBar from '../features/NavSideBar';
+import './../styles/Dashboard.css';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 const DashboardContent = () => {
   const [orders, setOrders] = useState([]);
   const [barOrders, setBarOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingChart, setLoadingChart] = useState(false);
   const controller = new AbortController();
-  const { isLoggedIn } = useSelector((state) => state.auth)
+  const { isLoggedIn } = useSelector(state => state.auth);
   const navigate = useNavigate();
 
-  const loadOrders = async () => {
+  const [totalRows, setTotalRows] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(1);
+
+  const loadOrders = async (page, rows, sortField, sortDirection) => {
+    page = page || 1;
+
     setLoading(true);
     await axios
-      .get('https://bootcamp-rent-car.herokuapp.com/admin/order', { signal: controller.signal })
+      .get('https://bootcamp-rent-cars.herokuapp.com/admin/v2/order', {
+        signal: controller.signal,
+        headers: { access_token: localStorage.getItem('access_token') },
+        params: {
+          page,
+          pageSize: rows || rowsPerPage,
+          sort: sortField ? `${sortField}:${sortDirection}` : 'created_at:desc'
+        }
+      })
       .then(response => {
-        setOrders(response.data);
-        handleChangeMonth(new Date().getMonth(), response.data);
+        setOrders(response.data.orders);
+        setTotalRows(response.data.count);
+        setRowsPerPage(response.data.pageSize);
       })
       .catch(err => console.error(err));
     setLoading(false);
   };
 
+  const loadOrderReport = async month => {
+    month = month || new Date().getMonth();
+    setLoadingChart(true);
+    await axios
+      .get('https://bootcamp-rent-cars.herokuapp.com/admin/order/reports', {
+        signal: controller.signal,
+        headers: { access_token: localStorage.getItem('access_token') },
+        params: {
+          from: Moment(new Date(2022, month, 1)).format('YYYY-MM-DD'),
+          until: Moment(new Date(2022, month + 1, 0)).format('YYYY-MM-DD')
+        }
+      })
+      .then(response => {
+        setBarOrders(response.data);
+      })
+      .catch(err => console.error(err));
+    setLoadingChart(false);
+  };
+
   useEffect(() => {
     loadOrders();
+    loadOrderReport();
   }, []);
 
   React.useEffect(() => {
     if (!isLoggedIn) {
       navigate('/');
     }
-  }, [!isLoggedIn])
+  }, [!isLoggedIn]);
 
   const getBarData = () => {
-    const dataObjectListByDate = [];
-    for (let i = 1; i <= 31; i++) {
-      const dataObjectByDate = { x: i.toString(), y: 0 };
-      const dataDates = barOrders.filter(order => new Date(order.start_rent_at).getDate() === i);
-      dataObjectByDate.y = dataDates.length;
-
-      dataObjectListByDate.push(dataObjectByDate);
-    }
-    return dataObjectListByDate;
-  };
-
-  const handleChangeMonth = (month, dataList) => {
-    const barOrders = (dataList || orders).filter(
-      order =>
-        new Date(order.start_rent_at).getMonth() === month && new Date(order.start_rent_at).getFullYear() === 2022
-    );
-    setBarOrders(barOrders);
+    const barData = [];
+    barOrders.forEach(barOrder => {
+      barData.push({
+        x: new Date(barOrder.day).getDate().toString(),
+        y: barOrder.orderCount
+      });
+    });
+    return barData;
   };
 
   const barData = {
@@ -85,35 +114,82 @@ const DashboardContent = () => {
   };
 
   const columns = [
-    { name: 'User Email', selector: row => row.User?.email || '-', sortable: true },
-    { name: 'Car', selector: row => row.Car?.name || '-', sortable: true },
+    { name: 'User Email', selector: row => row.User?.email || '-', sortable: true, sortField: 'user_email' },
+    { name: 'Car', selector: row => row.Car?.name || '-', sortable: true, sortField: 'car_name' },
     {
       name: 'Start Rent',
       selector: row => (row.start_rent_at ? new Date(row.start_rent_at).toDateString() : '-'),
-      sortable: true
+      sortable: true,
+      sortField: 'start_rent_at'
     },
     {
       name: 'Finish Rent',
       selector: row => (row.finish_rent_at ? new Date(row.finish_rent_at).toDateString() : '-'),
-      sortable: true
+      sortable: true,
+      sortField: 'finish_rent_at'
     },
     {
       name: 'Price',
       selector: row =>
         row.Car?.price
           ? row.Car?.price.toLocaleString('id-ID', {
-            style: 'currency',
-            currency: 'IDR'
-          })
+              style: 'currency',
+              currency: 'IDR'
+            })
           : '-',
-      sortable: true
+      sortable: true,
+      sortField: 'price'
     },
-    { name: 'Category', selector: row => row.Car?.category || '-', sortable: true }
+    { name: 'Category', selector: row => row.Car?.category || '-', sortable: true, sortField: 'category' },
+    {
+      cell: row => (
+        <Button size="sm" color="info" title="Change Status" onClick={() => doChangeStatus(row.id)}>
+          <FontAwesomeIcon icon={faPencil} size="sm" />
+        </Button>
+      ),
+      button: true,
+      name: 'Action'
+    }
   ];
+
+  const doChangeStatus = async id => {
+    await axios
+      .patch(
+        `https://bootcamp-rent-cars.herokuapp.com/admin/order/${id}`,
+        { status: 1 },
+        {
+          signal: controller.signal,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        }
+      )
+      .then(response => {
+        alert(response.data.message);
+        // loadOrderReport(); set combobox to default value
+      })
+      .catch(err => {
+        console.log(err);
+        alert('Error change status!');
+      });
+  };
+
+  const handlePageChange = page => {
+    setPage(page);
+    loadOrders(page, rowsPerPage);
+  };
+
+  const handleRowsChange = (rows, page) => {
+    loadOrders(page, rows);
+  };
+
+  const handleSort = ({ sortField }, sortDirection) => {
+    loadOrders(page, rowsPerPage, sortField, sortDirection);
+  };
 
   return (
     <>
-      <div className="container">
+      <div className="container" style={{ backgroundColor: '#F4F5F7' }}>
         <div className="row">
           <div className="col-3">
             <div className="d-flex">
@@ -122,14 +198,14 @@ const DashboardContent = () => {
             </div>
           </div>
         </div>
-        <div className="row">
+        <div className="row mb-3">
           <div className="col-3">
             <Label for="exampleSelect">Month</Label>
             <Input
               id="exampleSelect"
               name="selectMonth"
               type="select"
-              onChange={e => handleChangeMonth(+e.target.value)}
+              onChange={e => loadOrderReport(+e.target.value)}
               defaultValue={new Date().getMonth()}
             >
               {[
@@ -157,22 +233,34 @@ const DashboardContent = () => {
         </div>
         <div className="row">
           <div className="col">
-            {loading && <p className="text-center">Getting order data...</p>}
-            {!loading && <Bar style={{ background: '#f4f5f7' }} options={barOptions} data={barData}></Bar>}
+            {loadingChart && <p className="text-center">Getting order data...</p>}
+            {!loadingChart && <Bar style={{ background: '#f4f5f7' }} options={barOptions} data={barData}></Bar>}
           </div>
         </div>
 
-        <div className="row">
+        <div className="row mt-5">
           <div className="col-3">
             <div className="table-dashboard-text">Dashboard</div>
-            <div className="d-flex">
+            <div className="d-flex mt-3">
               <div className="title-square"></div>
               <p className="dashboard-title">List Order</p>
             </div>
           </div>
         </div>
         <div className="row">
-          <div className="col">{!loading && <DataTable columns={columns} data={orders} pagination></DataTable>}</div>
+          <div className="col">
+            <DataTable
+              columns={columns}
+              data={orders}
+              progressPending={loading}
+              pagination
+              paginationServer
+              paginationTotalRows={totalRows}
+              onChangePage={handlePageChange}
+              onChangeRowsPerPage={handleRowsChange}
+              onSort={handleSort}
+            ></DataTable>
+          </div>
         </div>
       </div>
     </>
