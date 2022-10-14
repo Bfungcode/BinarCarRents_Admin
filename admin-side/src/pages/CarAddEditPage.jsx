@@ -23,7 +23,7 @@ const CarAddEditPage = () => {
       /** edit */
       await axios
         .put(`https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`, values, {
-          headers: { access_token: localStorage.getItem('access_token') }
+          headers: { 'Content-Type': 'multipart/form-data', access_token: localStorage.getItem('access_token') }
         })
         .then(response => {
           console.log(response);
@@ -42,7 +42,7 @@ const CarAddEditPage = () => {
       /** add new */
       await axios
         .post(`https://bootcamp-rent-cars.herokuapp.com/admin/car`, values, {
-          headers: { access_token: localStorage.getItem('access_token') }
+          headers: { 'Content-Type': 'multipart/form-data', access_token: localStorage.getItem('access_token') }
         })
         .then(response => {
           console.log(response);
@@ -94,7 +94,7 @@ const CarAddEditPage = () => {
     initialValues: {
       name: '',
       price: '',
-      image: '',
+      image: {},
       category: ''
     },
     validationSchema: Yup.object({
@@ -105,7 +105,13 @@ const CarAddEditPage = () => {
         .integer()
         .min(10000, 'minimum Rp 10,000')
         .max(2147483647, 'maximum Rp 2,147,483,647'),
-      image: Yup.string().max(512, 'max 512 karakter').required('Tidak boleh kosong'),
+      image: Yup.mixed()
+        .test('file', 'Gambar tidak boleh kosong', value => {
+          return !!value;
+        })
+        .test('file', 'Maksimum size gambar 2MB', value => {
+          return value.size <= 2000000;
+        }),
       category: Yup.string().required('pilih salah satu')
     }),
     onSubmit: (values, actions) => {
@@ -118,7 +124,6 @@ const CarAddEditPage = () => {
     <>
       <div className="container mt-3" style={{ backgroundColor: '#F4F5F7' }}>
         {error && <p>Error! {error}</p>}
-        {/* {console.log(formik.errors)} */}
         <div className="row">
           <div className="col">
             <p style={{ fontWeight: '700', fontSize: '20px' }}>{isAdd ? 'Add New Car' : 'Edit Car'}</p>
@@ -167,11 +172,16 @@ const CarAddEditPage = () => {
                     <Col sm={6}>
                       <Input
                         name="image"
+                        type="file"
+                        multiple={false}
+                        accept="image/*"
                         placeholder="Upload Foto Mobil"
-                        onChange={formik.handleChange}
+                        onChange={e => {
+                          formik.setFieldValue('image', e.target.files[0]);
+                        }}
                         onBlur={formik.handleBlur}
-                        value={formik.values.image}
-                      ></Input>
+                      />
+
                       <FormText>File size max. 2MB</FormText>
                       {formik.touched.image && formik.errors.image && (
                         <p className="text-danger"> {formik.errors.image} </p>
