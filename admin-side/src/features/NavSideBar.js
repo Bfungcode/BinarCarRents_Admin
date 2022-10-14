@@ -19,10 +19,10 @@ const NavSideBar = ({ PageContent }) => {
           <div className="logo">Binar-Car</div>
           {/* <div> <SVGMenu /> </div> */}
           <div className="searchbar">
-            <div class="input-group">
-              <div class="form-outline">
-                <input type="search" id="form1" class="form-control" placeholder="Search" />
-                <label class="form-label"></label>
+            <div className="input-group">
+              <div className="form-outline">
+                <input type="search" id="form1" className="form-control" placeholder="Search" />
+                <label className="form-label"></label>
               </div>
               <div className="search-button">Search</div>
             </div>
