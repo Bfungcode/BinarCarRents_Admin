@@ -131,14 +131,14 @@ const DashboardContent = () => {
     {
       name: 'Price',
       selector: row =>
-        row.Car?.price
-          ? row.Car?.price.toLocaleString('id-ID', {
+        row.total_price
+          ? row.total_price.toLocaleString('id-ID', {
               style: 'currency',
               currency: 'IDR'
             })
           : '-',
       sortable: true,
-      sortField: 'price'
+      sortField: 'total_price'
     },
     { name: 'Category', selector: row => row.Car?.category || '-', sortable: true, sortField: 'category' },
     {
@@ -259,6 +259,7 @@ const DashboardContent = () => {
               onChangePage={handlePageChange}
               onChangeRowsPerPage={handleRowsChange}
               onSort={handleSort}
+              sortServer
             ></DataTable>
           </div>
         </div>
