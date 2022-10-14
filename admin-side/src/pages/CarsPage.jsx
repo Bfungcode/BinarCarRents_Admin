@@ -30,27 +30,7 @@ const CarsContent = () => {
 
   const loadCars = async () => {
     setActiveCategory('');
-    setLoading(true);
-    try {
-      const { data } = await axios.get(
-        `https://bootcamp-rent-cars.herokuapp.com/admin/v2/car?page=${page}&pageSize=12`,
-        {
-          signal: controller.signal,
-          headers: { access_token: localStorage.getItem('access_token') }
-        }
-      );
-      setCars(data.cars);
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
-  };
-
-  const showToastSave = () => {
-    const responseStatus = localStorage.getItem('responseStatus');
-    setToastSave(!!responseStatus);
-    setTimeout(() => setToastSave(false), 4000);
-    localStorage.removeItem('responseStatus');
+    getCars();
   };
 
   useEffect(() => {
@@ -63,6 +43,36 @@ const CarsContent = () => {
       navigate('/');
     }
   }, [!isLoggedIn]);
+
+  const showToastSave = () => {
+    const responseStatus = localStorage.getItem('responseStatus');
+    setToastSave(!!responseStatus);
+    setTimeout(() => setToastSave(false), 4000);
+    localStorage.removeItem('responseStatus');
+  };
+
+  const doFilterCars = async category => {
+    setActiveCategory(category);
+    getCars(category);
+  };
+
+  const getCars = async category => {
+    setActiveCategory(category);
+    setLoading(true);
+    let url = `https://bootcamp-rent-cars.herokuapp.com/admin/v2/car?page=${page}&pageSize=12`;
+    url += category ? `&category=${category}` : '';
+
+    try {
+      const { data } = await axios.get(url, {
+        signal: controller.signal,
+        headers: { access_token: localStorage.getItem('access_token') }
+      });
+      setCars(data.cars);
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+  };
 
   const doDelete = async () => {
     await axios
@@ -83,24 +93,6 @@ const CarsContent = () => {
         console.error(error);
       });
     setModal(false);
-  };
-
-  const doFilterCars = async category => {
-    setActiveCategory(category);
-    setLoading(true);
-    try {
-      const { data } = await axios.get(
-        `https://bootcamp-rent-cars.herokuapp.com/admin/v2/car?page=${page}&pageSize=12&category=${category}`,
-        {
-          signal: controller.signal,
-          headers: { access_token: localStorage.getItem('access_token') }
-        }
-      );
-      setCars(data.cars);
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
   };
 
   return (
@@ -229,6 +221,48 @@ const CarsContent = () => {
                 </div>
               );
             })}
+          {/* <Pagination aria-label="Page navigation example">
+            <PaginationItem>
+              <PaginationLink
+                first
+                href="#"
+                onClick={() => {
+                  setPage(1);
+                  loadCars();
+                }}
+              />
+            </PaginationItem>
+            <PaginationItem disabled={page === 1}>
+              <PaginationLink
+                href="#"
+                previous
+                onClick={() => {
+                  setPage(page - 1);
+                  loadCars();
+                }}
+              />
+            </PaginationItem>
+            <PaginationItem disabled={page === 100}>
+              <PaginationLink
+                href="#"
+                next
+                onClick={() => {
+                  setPage(page + 1);
+                  loadCars();
+                }}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#"
+                last
+                onClick={() => {
+                  setPage(100);
+                  loadCars();
+                }}
+              />
+            </PaginationItem>
+          </Pagination> */}
         </div>
 
         {/* modal confirmation delete */}
