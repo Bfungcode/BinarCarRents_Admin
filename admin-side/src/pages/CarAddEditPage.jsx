@@ -1,8 +1,7 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Col, Form, FormGroup, FormText, Input, Label } from 'reactstrap';
 import * as Yup from 'yup';
@@ -14,7 +13,7 @@ const CarAddEditPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const controller = new AbortController();
-  const { isLoggedIn } = useSelector((state) => state.auth)
+  const { isLoggedIn } = useSelector(state => state.auth);
   const navigate = useNavigate();
 
   const handleSubmit = async (values, actions) => {
@@ -23,7 +22,9 @@ const CarAddEditPage = () => {
     if (id) {
       /** edit */
       await axios
-        .put(`https://bootcamp-rent-car.herokuapp.com/admin/car/${id}`, values)
+        .put(`https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`, values, {
+          headers: { 'Content-Type': 'multipart/form-data', access_token: localStorage.getItem('access_token') }
+        })
         .then(response => {
           console.log(response);
           actions.setSubmitting(false);
@@ -40,7 +41,9 @@ const CarAddEditPage = () => {
     } else {
       /** add new */
       await axios
-        .post(`https://bootcamp-rent-car.herokuapp.com/admin/car`, values)
+        .post(`https://bootcamp-rent-cars.herokuapp.com/admin/car`, values, {
+          headers: { 'Content-Type': 'multipart/form-data', access_token: localStorage.getItem('access_token') }
+        })
         .then(response => {
           console.log(response);
           actions.setSubmitting(false);
@@ -60,8 +63,9 @@ const CarAddEditPage = () => {
   const loadCar = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get('https://bootcamp-rent-car.herokuapp.com/admin/car/' + id, {
-        signal: controller.signal
+      const { data } = await axios.get('https://bootcamp-rent-cars.herokuapp.com/admin/car/' + id, {
+        signal: controller.signal,
+        headers: { access_token: localStorage.getItem('access_token') }
       });
       formik.setFieldValue('name', data?.name || '');
       formik.setFieldValue('price', data?.price || '');
@@ -84,13 +88,13 @@ const CarAddEditPage = () => {
     if (!isLoggedIn) {
       navigate('/');
     }
-  }, [!isLoggedIn])
+  }, [!isLoggedIn]);
 
   const formik = useFormik({
     initialValues: {
       name: '',
       price: '',
-      image: '',
+      image: {},
       category: ''
     },
     validationSchema: Yup.object({
@@ -101,7 +105,13 @@ const CarAddEditPage = () => {
         .integer()
         .min(10000, 'minimum Rp 10,000')
         .max(2147483647, 'maximum Rp 2,147,483,647'),
-      image: Yup.string().max(512, 'max 512 karakter').required('Tidak boleh kosong'),
+      image: Yup.mixed()
+        .test('file', 'Gambar tidak boleh kosong', value => {
+          return !!value;
+        })
+        .test('file', 'Maksimum size gambar 2MB', value => {
+          return value.size <= 2000000;
+        }),
       category: Yup.string().required('pilih salah satu')
     }),
     onSubmit: (values, actions) => {
@@ -112,9 +122,8 @@ const CarAddEditPage = () => {
 
   return (
     <>
-      <div className="container mt-3">
+      <div className="container mt-3" style={{ backgroundColor: '#F4F5F7' }}>
         {error && <p>Error! {error}</p>}
-        {/* {console.log(formik.errors)} */}
         <div className="row">
           <div className="col">
             <p style={{ fontWeight: '700', fontSize: '20px' }}>{isAdd ? 'Add New Car' : 'Edit Car'}</p>
@@ -163,11 +172,16 @@ const CarAddEditPage = () => {
                     <Col sm={6}>
                       <Input
                         name="image"
+                        type="file"
+                        multiple={false}
+                        accept="image/*"
                         placeholder="Upload Foto Mobil"
-                        onChange={formik.handleChange}
+                        onChange={e => {
+                          formik.setFieldValue('image', e.target.files[0]);
+                        }}
                         onBlur={formik.handleBlur}
-                        value={formik.values.image}
-                      ></Input>
+                      />
+
                       <FormText>File size max. 2MB</FormText>
                       {formik.touched.image && formik.errors.image && (
                         <p className="text-danger"> {formik.errors.image} </p>
@@ -193,9 +207,6 @@ const CarAddEditPage = () => {
                         <option value={'small'}>small</option>
                         <option value={'medium'}>medium</option>
                         <option value={'large'}>large</option>
-                        <option value={'2 - 4 orang'}>2 - 4 orang</option>
-                        <option value={'4 - 6 orang'}>4 - 6 orang</option>
-                        <option value={'6 - 8 orang'}>6 - 8 orang</option>
                       </Input>
                       {formik.touched.category && formik.errors.category && (
                         <p className="text-danger"> {formik.errors.category} </p>
