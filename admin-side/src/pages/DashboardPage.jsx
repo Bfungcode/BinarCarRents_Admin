@@ -27,17 +27,21 @@ const DashboardContent = () => {
 
   const loadOrders = async (page, rows, sortField, sortDirection) => {
     page = page || 1;
+    const user = JSON.parse(localStorage.getItem("user"))
 
     setLoading(true);
     await axios
       .get('https://bootcamp-rent-cars.herokuapp.com/admin/v2/order', {
         signal: controller.signal,
-        headers: { access_token: localStorage.getItem('access_token') },
+        headers: {
+          "Content-Type": "application/json",
+          access_token: user.access_token,
+        },
         params: {
           page,
           pageSize: rows || rowsPerPage,
           sort: sortField ? `${sortField}:${sortDirection}` : 'created_at:desc'
-        }
+        },
       })
       .then(response => {
         setOrders(response.data.orders);
@@ -51,10 +55,14 @@ const DashboardContent = () => {
   const loadOrderReport = async month => {
     month = month || new Date().getMonth();
     setLoadingChart(true);
+    const user = JSON.parse(localStorage.getItem("user"))
     await axios
       .get('https://bootcamp-rent-cars.herokuapp.com/admin/order/reports', {
         signal: controller.signal,
-        headers: { access_token: localStorage.getItem('access_token') },
+        headers: {
+          "Content-Type": "application/json",
+          access_token: user.access_token,
+        },
         params: {
           from: Moment(new Date(2022, month, 1)).format('YYYY-MM-DD'),
           until: Moment(new Date(2022, month + 1, 0)).format('YYYY-MM-DD')
@@ -133,9 +141,9 @@ const DashboardContent = () => {
       selector: row =>
         row.total_price
           ? row.total_price.toLocaleString('id-ID', {
-              style: 'currency',
-              currency: 'IDR'
-            })
+            style: 'currency',
+            currency: 'IDR'
+          })
           : '-',
       sortable: true,
       sortField: 'total_price'

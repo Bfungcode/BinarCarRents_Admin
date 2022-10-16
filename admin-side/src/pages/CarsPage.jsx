@@ -59,13 +59,17 @@ const CarsContent = () => {
   const getCars = async category => {
     setActiveCategory(category);
     setLoading(true);
+    const user = JSON.parse(localStorage.getItem("user"))
     let url = `https://bootcamp-rent-cars.herokuapp.com/admin/v2/car?page=${page}&pageSize=12`;
     url += category ? `&category=${category}` : '';
 
     try {
       const { data } = await axios.get(url, {
         signal: controller.signal,
-        headers: { access_token: localStorage.getItem('access_token') }
+        headers: {
+          "Content-Type": "application/json",
+          access_token: user.access_token,
+        },
       });
       setCars(data.cars);
     } catch (error) {
