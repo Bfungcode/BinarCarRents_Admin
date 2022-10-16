@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Modal, ModalBody, ModalFooter, Toast, ToastBody } from 'reactstrap';
 import NavSideBar from '../features/NavSideBar';
@@ -9,6 +9,7 @@ import SVGEdit from '../vectors/svg-edit';
 import SVGTrash from '../vectors/svg-trash';
 import SVGUser from '../vectors/svg-user';
 import './../styles/cars.css';
+import { getAllCars } from '../features/Admin/adminSlice';
 
 const CarsContent = () => {
   const [cars, setCars] = useState([]); // cars keseluruhan
@@ -22,6 +23,7 @@ const CarsContent = () => {
   const [page, setPage] = useState(1);
   const controller = new AbortController();
   const { isLoggedIn } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const toggle = () => {
