@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const API_URL = "https://bootcamp-rent-car.herokuapp.com/";
+const API_URL = "https://bootcamp-rent-cars.herokuapp.com/";
 
 const login = (email, password) => {
   return axios.post(`${API_URL}admin/auth/login`, {
