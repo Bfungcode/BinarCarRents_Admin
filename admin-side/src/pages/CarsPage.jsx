@@ -1,24 +1,27 @@
-import React from 'react';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Modal, ModalBody, ModalFooter, Toast, ToastBody } from 'reactstrap';
 import NavSideBar from '../features/NavSideBar';
 import SVGClock from '../vectors/svg-clock';
+import SVGEdit from '../vectors/svg-edit';
+import SVGTrash from '../vectors/svg-trash';
 import SVGUser from '../vectors/svg-user';
 import './../styles/cars.css';
 
 const CarsContent = () => {
   const [cars, setCars] = useState([]); // cars keseluruhan
-  const [filteredCars, setFilteredCars] = useState([]);
+  // const [filteredCars, setFilteredCars] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const [id, setId] = useState({});
   const [toastSave, setToastSave] = useState(false);
   const [toastDelete, setToastDelete] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('');
+  const [page, setPage] = useState(1);
   const controller = new AbortController();
-  const { isLoggedIn } = useSelector((state) => state.auth)
+  const { isLoggedIn } = useSelector(state => state.auth);
   const navigate = useNavigate();
 
   const toggle = () => {
@@ -26,25 +29,8 @@ const CarsContent = () => {
   };
 
   const loadCars = async () => {
-    setLoading(true);
-    try {
-      const { data } = await axios.get('https://bootcamp-rent-car.herokuapp.com/admin/car', {
-        signal: controller.signal
-      });
-      data.sort((a, b) => b.id - a.id);
-      setCars(data);
-      setFilteredCars(data);
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
-  };
-
-  const showToastSave = () => {
-    const responseStatus = localStorage.getItem('responseStatus');
-    setToastSave(!!responseStatus);
-    setTimeout(() => setToastSave(false), 4000);
-    localStorage.removeItem('responseStatus');
+    setActiveCategory('');
+    getCars();
   };
 
   useEffect(() => {
@@ -56,11 +42,43 @@ const CarsContent = () => {
     if (!isLoggedIn) {
       navigate('/');
     }
-  }, [!isLoggedIn])
+  }, [!isLoggedIn]);
+
+  const showToastSave = () => {
+    const responseStatus = localStorage.getItem('responseStatus');
+    setToastSave(!!responseStatus);
+    setTimeout(() => setToastSave(false), 4000);
+    localStorage.removeItem('responseStatus');
+  };
+
+  const doFilterCars = async category => {
+    setActiveCategory(category);
+    getCars(category);
+  };
+
+  const getCars = async category => {
+    setActiveCategory(category);
+    setLoading(true);
+    let url = `https://bootcamp-rent-cars.herokuapp.com/admin/v2/car?page=${page}&pageSize=12`;
+    url += category ? `&category=${category}` : '';
+
+    try {
+      const { data } = await axios.get(url, {
+        signal: controller.signal,
+        headers: { access_token: localStorage.getItem('access_token') }
+      });
+      setCars(data.cars);
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+  };
 
   const doDelete = async () => {
     await axios
-      .delete(`https://bootcamp-rent-car.herokuapp.com/admin/car/${id}`)
+      .delete(`https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`, {
+        headers: { access_token: localStorage.getItem('access_token') }
+      })
       .then(response => {
         console.log(response);
         if (response.statusText === 'OK') {
@@ -77,14 +95,9 @@ const CarsContent = () => {
     setModal(false);
   };
 
-  const doFilterCars = category => {
-    const filteredCars = cars.filter(car => car.category === category);
-    setFilteredCars(filteredCars);
-  };
-
   return (
     <>
-      <div className="container">
+      <div className="container" style={{ backgroundColor: '#F4F5F7' }}>
         <div className="row m-3">
           <div className="col-10">
             <p className="fw-bold" style={{ fontSize: '20px' }}>
@@ -93,7 +106,7 @@ const CarsContent = () => {
           </div>
           <div className="col-2">
             <Link to={'/cars/add'}>
-              <Button className="btn-info">+ Add New Car</Button>
+              <Button className="btn-add-new">+ Add New Car</Button>
             </Link>
           </div>
         </div>
@@ -121,29 +134,36 @@ const CarsContent = () => {
 
         <div className="row">
           <div className="d-flex" style={{ columnGap: '1rem' }}>
-            <Button className="btn-light" onClick={() => setFilteredCars(cars)}>
+            <Button className={(activeCategory === '' ? 'active-ct' : '') + 'btn-category'} onClick={loadCars}>
               All
             </Button>
-            <Button className="btn-light" onClick={() => doFilterCars('2 - 4 orang')}>
-              2 - 4 people
+            <Button
+              className={(activeCategory === 'small' ? 'active-ct' : '') + 'btn-category'}
+              onClick={() => doFilterCars('small')}
+            >
+              Small
             </Button>
-            <Button className="btn-light" onClick={() => doFilterCars('4 - 6 orang')}>
-              4 - 6 people
+            <Button
+              className={(activeCategory === 'medium' ? 'active-ct' : '') + 'btn-category'}
+              onClick={() => doFilterCars('medium')}
+            >
+              Medium
             </Button>
-            <Button className="btn-light" onClick={() => doFilterCars('6 - 8 orang')}>
-              6 - 8 people
+            <Button
+              className={(activeCategory === 'large' ? 'active-ct' : '') + 'btn-category'}
+              onClick={() => doFilterCars('large')}
+            >
+              Large
             </Button>
           </div>
         </div>
 
         <div className="car-result row">
           {loading && <p className="text-center">Getting cars data...</p>}
-          {!loading && (!filteredCars || filteredCars.length === 0) && (
-            <p className="text-center">No data available.</p>
-          )}
+          {!loading && (!cars || cars.length === 0) && <p className="text-center">No data available.</p>}
           {!loading &&
-            filteredCars.length > 0 &&
-            filteredCars.map((car, index) => {
+            cars.length > 0 &&
+            cars.map((car, index) => {
               return (
                 <div key={index} className="car-item">
                   {/* col-lg-4 col-md-6 col-sm-12 */}
@@ -166,35 +186,83 @@ const CarsContent = () => {
                     <div style={{ marginRight: '0.5rem' }}>
                       <SVGUser />
                     </div>
-                    <p className="mb-0 text-secondary">{car.category || 'N/A'}</p>
+                    <p className="mb-0 ">{car.category || 'N/A'}</p>
                   </div>
                   <br />
                   <div className="d-inline-flex mt-3 mb-2">
                     <div style={{ marginRight: '0.5rem' }}>
                       <SVGClock />
                     </div>
-                    <p className="text-secondary">Updated at {new Date(car.updatedAt).toUTCString()}</p>
+                    <p>Updated at {new Date(car.updatedAt).toUTCString()}</p>
                   </div>
-                  <div className="d-flex" style={{ justifyContent: 'space-evenly' }}>
+                  <div className="d-grid btn-action-group">
                     <Button
                       onClick={() => {
                         setId(car.id);
                         toggle();
                       }}
-                      className="btn-light btn-outline-danger"
+                      className="btn-delete-car"
                       key={'del-' + index}
                     >
-                      Delete
+                      <div className="btn-car-flex">
+                        <SVGTrash />
+                        Delete
+                      </div>
                     </Button>
                     <Link key={index} to={`/cars/${car.id}`}>
                       <Button key={index} className="btn-choose-car car-text-bold">
-                        Edit
+                        <div className="btn-car-flex">
+                          <SVGEdit />
+                          Edit
+                        </div>
                       </Button>
                     </Link>
                   </div>
                 </div>
               );
             })}
+          {/* <Pagination aria-label="Page navigation example">
+            <PaginationItem>
+              <PaginationLink
+                first
+                href="#"
+                onClick={() => {
+                  setPage(1);
+                  loadCars();
+                }}
+              />
+            </PaginationItem>
+            <PaginationItem disabled={page === 1}>
+              <PaginationLink
+                href="#"
+                previous
+                onClick={() => {
+                  setPage(page - 1);
+                  loadCars();
+                }}
+              />
+            </PaginationItem>
+            <PaginationItem disabled={page === 100}>
+              <PaginationLink
+                href="#"
+                next
+                onClick={() => {
+                  setPage(page + 1);
+                  loadCars();
+                }}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#"
+                last
+                onClick={() => {
+                  setPage(100);
+                  loadCars();
+                }}
+              />
+            </PaginationItem>
+          </Pagination> */}
         </div>
 
         {/* modal confirmation delete */}

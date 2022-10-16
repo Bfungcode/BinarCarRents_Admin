@@ -12,7 +12,6 @@ const handleSubmit = async (values, actions, dispatch, navigate) => {
     dispatch(login({ email, password }))
         .unwrap()
         .then(() => {
-            console.log('sukses');
             navigate('/dashboard');
 
         })
