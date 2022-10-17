@@ -1,19 +1,17 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Modal, ModalBody, ModalFooter, Toast, ToastBody } from 'reactstrap';
+import { deleteCarById, getAllCars } from '../features/Admin/adminSlice';
 import NavSideBar from '../features/NavSideBar';
 import SVGClock from '../vectors/svg-clock';
 import SVGEdit from '../vectors/svg-edit';
 import SVGTrash from '../vectors/svg-trash';
 import SVGUser from '../vectors/svg-user';
 import './../styles/cars.css';
-import { getAllCars } from '../features/Admin/adminSlice';
 
 const CarsContent = () => {
-  const [cars, setCars] = useState([]); // cars keseluruhan
-  // const [filteredCars, setFilteredCars] = useState([]);
+  const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const [id, setId] = useState({});
@@ -21,7 +19,6 @@ const CarsContent = () => {
   const [toastDelete, setToastDelete] = useState(false);
   const [activeCategory, setActiveCategory] = useState('');
   const [page, setPage] = useState(1);
-  const controller = new AbortController();
   const { isLoggedIn } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -61,43 +58,31 @@ const CarsContent = () => {
   const getCars = async category => {
     setActiveCategory(category);
     setLoading(true);
-    const user = JSON.parse(localStorage.getItem("user"))
-    let url = `https://bootcamp-rent-cars.herokuapp.com/admin/v2/car?page=${page}&pageSize=12`;
-    url += category ? `&category=${category}` : '';
 
-    try {
-      const { data } = await axios.get(url, {
-        signal: controller.signal,
-        headers: {
-          "Content-Type": "application/json",
-          access_token: user.access_token,
-        },
+    dispatch(getAllCars({ category, page, pageSize: 12 }))
+      .unwrap()
+      .then(data => {
+        setCars(data.cars);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
       });
-      setCars(data.cars);
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
   };
 
   const doDelete = async () => {
-    await axios
-      .delete(`https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`, {
-        headers: { access_token: localStorage.getItem('access_token') }
-      })
+    dispatch(deleteCarById({ id }))
+      .unwrap()
       .then(response => {
-        console.log(response);
-        if (response.statusText === 'OK') {
-          loadCars();
-          setToastDelete(true);
-          setTimeout(() => {
-            setToastDelete(false);
-          }, 4000);
-        } else alert('delete error');
+        loadCars();
+        setToastDelete(true);
+        setTimeout(() => {
+          setToastDelete(false);
+        }, 4000);
       })
-      .catch(error => {
-        console.error(error);
-      });
+      .catch(err => console.error(err));
+
     setModal(false);
   };
 
