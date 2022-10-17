@@ -74,7 +74,7 @@ const CarsContent = () => {
   const doDelete = async () => {
     dispatch(deleteCarById({ id }))
       .unwrap()
-      .then(response => {
+      .then(() => {
         loadCars();
         setToastDelete(true);
         setTimeout(() => {
@@ -90,12 +90,12 @@ const CarsContent = () => {
     <>
       <div className="container" style={{ backgroundColor: '#F4F5F7' }}>
         <div className="row m-3">
-          <div className="col-10">
+          <div className="col-9">
             <p className="fw-bold" style={{ fontSize: '20px' }}>
               List Cars
             </p>
           </div>
-          <div className="col-2">
+          <div className="col-3">
             <Link to={'/cars/add'}>
               <Button className="btn-add-new">+ Add New Car</Button>
             </Link>
@@ -105,7 +105,7 @@ const CarsContent = () => {
         {toastSave && (
           <div className="row">
             <div className="col d-grid justify-content-center">
-              <Toast isOpen={toastSave} fade>
+              <Toast isOpen={toastSave} fade className="toast-save-success">
                 <ToastBody>Data Berhasil Disimpan</ToastBody>
               </Toast>
             </div>
@@ -116,7 +116,7 @@ const CarsContent = () => {
         {toastDelete && (
           <div className="row">
             <div className="col d-grid justify-content-center">
-              <Toast isOpen={toastDelete} fade>
+              <Toast isOpen={toastDelete} fade className="toast-delete-success">
                 <ToastBody>Data Berhasil Dihapus</ToastBody>
               </Toast>
             </div>
@@ -265,11 +265,11 @@ const CarsContent = () => {
             </p>
             Setelah dihapus, data mobil tidak dapat dikembalikan. Yakin ingin menghapus?
           </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={doDelete}>
+          <ModalFooter className="justify-content-center">
+            <Button className="btn-modal-yes" onClick={doDelete}>
               Ya
             </Button>
-            <Button color="secondary" onClick={toggle}>
+            <Button className="btn-modal-no" onClick={toggle}>
               Tidak
             </Button>
           </ModalFooter>
