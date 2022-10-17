@@ -1,19 +1,17 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Modal, ModalBody, ModalFooter, Toast, ToastBody } from 'reactstrap';
+import { deleteCarById, getAllCars } from '../features/Admin/adminSlice';
 import NavSideBar from '../features/NavSideBar';
 import SVGClock from '../vectors/svg-clock';
 import SVGEdit from '../vectors/svg-edit';
 import SVGTrash from '../vectors/svg-trash';
 import SVGUser from '../vectors/svg-user';
 import './../styles/cars.css';
-import { getAllCars } from '../features/Admin/adminSlice';
 
 const CarsContent = () => {
-  const [cars, setCars] = useState([]); // cars keseluruhan
-  // const [filteredCars, setFilteredCars] = useState([]);
+  const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const [id, setId] = useState({});
@@ -21,7 +19,6 @@ const CarsContent = () => {
   const [toastDelete, setToastDelete] = useState(false);
   const [activeCategory, setActiveCategory] = useState('');
   const [page, setPage] = useState(1);
-  const controller = new AbortController();
   const { isLoggedIn } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -61,43 +58,31 @@ const CarsContent = () => {
   const getCars = async category => {
     setActiveCategory(category);
     setLoading(true);
-    const user = JSON.parse(localStorage.getItem("user"))
-    let url = `https://bootcamp-rent-cars.herokuapp.com/admin/v2/car?page=${page}&pageSize=12`;
-    url += category ? `&category=${category}` : '';
 
-    try {
-      const { data } = await axios.get(url, {
-        signal: controller.signal,
-        headers: {
-          "Content-Type": "application/json",
-          access_token: user.access_token,
-        },
+    dispatch(getAllCars({ category, page, pageSize: 12 }))
+      .unwrap()
+      .then(data => {
+        setCars(data.cars);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
       });
-      setCars(data.cars);
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
   };
 
   const doDelete = async () => {
-    await axios
-      .delete(`https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`, {
-        headers: { access_token: localStorage.getItem('access_token') }
+    dispatch(deleteCarById({ id }))
+      .unwrap()
+      .then(() => {
+        loadCars();
+        setToastDelete(true);
+        setTimeout(() => {
+          setToastDelete(false);
+        }, 4000);
       })
-      .then(response => {
-        console.log(response);
-        if (response.statusText === 'OK') {
-          loadCars();
-          setToastDelete(true);
-          setTimeout(() => {
-            setToastDelete(false);
-          }, 4000);
-        } else alert('delete error');
-      })
-      .catch(error => {
-        console.error(error);
-      });
+      .catch(err => console.error(err));
+
     setModal(false);
   };
 
@@ -105,12 +90,12 @@ const CarsContent = () => {
     <>
       <div className="container" style={{ backgroundColor: '#F4F5F7' }}>
         <div className="row m-3">
-          <div className="col-10">
+          <div className="col-9">
             <p className="fw-bold" style={{ fontSize: '20px' }}>
               List Cars
             </p>
           </div>
-          <div className="col-2">
+          <div className="col-3">
             <Link to={'/cars/add'}>
               <Button className="btn-add-new">+ Add New Car</Button>
             </Link>
@@ -120,7 +105,7 @@ const CarsContent = () => {
         {toastSave && (
           <div className="row">
             <div className="col d-grid justify-content-center">
-              <Toast isOpen={toastSave} fade>
+              <Toast isOpen={toastSave} fade className="toast-save-success">
                 <ToastBody>Data Berhasil Disimpan</ToastBody>
               </Toast>
             </div>
@@ -131,7 +116,7 @@ const CarsContent = () => {
         {toastDelete && (
           <div className="row">
             <div className="col d-grid justify-content-center">
-              <Toast isOpen={toastDelete} fade>
+              <Toast isOpen={toastDelete} fade className="toast-delete-success">
                 <ToastBody>Data Berhasil Dihapus</ToastBody>
               </Toast>
             </div>
@@ -280,11 +265,11 @@ const CarsContent = () => {
             </p>
             Setelah dihapus, data mobil tidak dapat dikembalikan. Yakin ingin menghapus?
           </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={doDelete}>
+          <ModalFooter className="justify-content-center">
+            <Button className="btn-modal-yes" onClick={doDelete}>
               Ya
             </Button>
-            <Button color="secondary" onClick={toggle}>
+            <Button className="btn-modal-no" onClick={toggle}>
               Tidak
             </Button>
           </ModalFooter>
