@@ -224,9 +224,9 @@ const CarAddEditContent = () => {
 
                   <div className="d-flex justify-content-sm-start" style={{ columnGap: '1rem' }}>
                     <Link to={'/cars'}>
-                      <Button className="btn-light btn-outline-primary"> Cancel</Button>
+                      <Button className="btn-car-cancel"> Cancel</Button>
                     </Link>
-                    <Button color="primary" type="submit">
+                    <Button className="btn-car-save" type="submit">
                       Save
                     </Button>
                   </div>
