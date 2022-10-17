@@ -1,32 +1,31 @@
-import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Col, Form, FormGroup, FormText, Input, Label } from 'reactstrap';
 import * as Yup from 'yup';
+import { getCarById, postCar, updateCarById } from '../features/Admin/adminSlice';
+import NavSideBar from '../features/NavSideBar';
 import './../styles/CarAddEdit.css';
 
-const CarAddEditPage = () => {
+const CarAddEditContent = () => {
   const [isAdd, setIsAdd] = useState(false);
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const controller = new AbortController();
+  const [car, setCar] = useState();
   const { isLoggedIn } = useSelector(state => state.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (values, actions) => {
     values.price = +values.price;
     values.status = false;
     if (id) {
       /** edit */
-      await axios
-        .put(`https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`, values, {
-          headers: { 'Content-Type': 'multipart/form-data', access_token: localStorage.getItem('access_token') }
-        })
-        .then(response => {
-          console.log(response);
+      dispatch(updateCarById({ id, ...values }))
+        .unwrap()
+        .then(() => {
           actions.setSubmitting(false);
           actions.resetForm();
           localStorage.setItem('responseStatus', 'OK');
@@ -34,16 +33,13 @@ const CarAddEditPage = () => {
           navigate('/cars');
         })
         .catch(error => {
-          console.error(error);
           actions.setSubmitting(false);
           setError(error);
         });
     } else {
       /** add new */
-      await axios
-        .post(`https://bootcamp-rent-cars.herokuapp.com/admin/car`, values, {
-          headers: { 'Content-Type': 'multipart/form-data', access_token: localStorage.getItem('access_token') }
-        })
+      dispatch(postCar(values))
+        .unwrap()
         .then(response => {
           console.log(response);
           actions.setSubmitting(false);
@@ -62,19 +58,21 @@ const CarAddEditPage = () => {
 
   const loadCar = async () => {
     setLoading(true);
-    try {
-      const { data } = await axios.get('https://bootcamp-rent-cars.herokuapp.com/admin/car/' + id, {
-        signal: controller.signal,
-        headers: { access_token: localStorage.getItem('access_token') }
+
+    dispatch(getCarById({ id }))
+      .unwrap()
+      .then(data => {
+        formik.setFieldValue('name', data?.name || '');
+        formik.setFieldValue('price', data?.price || '');
+        formik.setFieldValue('image', data?.image || '');
+        formik.setFieldValue('category', data?.category || '');
+        setCar(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setLoading(false);
       });
-      formik.setFieldValue('name', data?.name || '');
-      formik.setFieldValue('price', data?.price || '');
-      formik.setFieldValue('image', data?.image || '');
-      formik.setFieldValue('category', data?.category || '');
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -107,7 +105,7 @@ const CarAddEditPage = () => {
         .max(2147483647, 'maximum Rp 2,147,483,647'),
       image: Yup.mixed()
         .test('file', 'Gambar tidak boleh kosong', value => {
-          return !!value;
+          return !!value?.name;
         })
         .test('file', 'Maksimum size gambar 2MB', value => {
           return value.size <= 2000000;
@@ -214,6 +212,16 @@ const CarAddEditPage = () => {
                     </Col>
                   </FormGroup>
 
+                  <FormGroup row>
+                    <Label sm={2}>Created at</Label>
+                    <Label sm={6}>{car ? new Date(car.createdAt).toUTCString() : '-'}</Label>
+                  </FormGroup>
+
+                  <FormGroup row>
+                    <Label sm={2}>Updated at</Label>
+                    <Label sm={6}>{car ? new Date(car.updatedAt).toUTCString() : '-'}</Label>
+                  </FormGroup>
+
                   <div className="d-flex justify-content-sm-start" style={{ columnGap: '1rem' }}>
                     <Link to={'/cars'}>
                       <Button className="btn-light btn-outline-primary"> Cancel</Button>
@@ -230,6 +238,10 @@ const CarAddEditPage = () => {
       </div>
     </>
   );
+};
+
+const CarAddEditPage = () => {
+  return <NavSideBar PageContent={CarAddEditContent} />;
 };
 
 export default CarAddEditPage;
