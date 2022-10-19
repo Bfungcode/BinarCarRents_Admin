@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, Modal, ModalBody, ModalFooter, Toast, ToastBody } from 'reactstrap';
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Toast,
+  ToastBody
+} from 'reactstrap';
 import { deleteCarById, getAllCars } from '../features/Admin/adminSlice';
 import NavSideBar from '../features/NavSideBar';
 import SVGClock from '../vectors/svg-clock';
@@ -18,10 +28,15 @@ const CarsContent = () => {
   const [toastSave, setToastSave] = useState(false);
   const [toastDelete, setToastDelete] = useState(false);
   const [activeCategory, setActiveCategory] = useState('');
-  const [page, setPage] = useState(1);
+
   const { isLoggedIn } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [page, setPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [pageSize, setPageSize] = useState(0);
+  const [carCount, setCarCount] = useState(0);
 
   const toggle = () => {
     setModal(!modal);
@@ -29,7 +44,7 @@ const CarsContent = () => {
 
   const loadCars = async () => {
     setActiveCategory('');
-    getCars();
+    getCars({ page });
   };
 
   useEffect(() => {
@@ -52,17 +67,20 @@ const CarsContent = () => {
 
   const doFilterCars = async category => {
     setActiveCategory(category);
-    getCars(category);
+    getCars({ category, page });
   };
 
-  const getCars = async category => {
+  const getCars = async ({ category, page }) => {
     setActiveCategory(category);
     setLoading(true);
 
-    dispatch(getAllCars({ category, page, pageSize: 12 }))
+    dispatch(getAllCars({ category, page, pageSize: 9 }))
       .unwrap()
       .then(data => {
         setCars(data.cars);
+        setLastPage(data.pageCount);
+        setPageSize(data.pageSize);
+        setCarCount(data.count);
         setLoading(false);
       })
       .catch(err => {
@@ -84,6 +102,11 @@ const CarsContent = () => {
       .catch(err => console.error(err));
 
     setModal(false);
+  };
+
+  const handleClickPage = ({ page }) => {
+    setPage(page);
+    getCars({ page, category: activeCategory });
   };
 
   return (
@@ -212,48 +235,40 @@ const CarsContent = () => {
                 </div>
               );
             })}
-          {/* <Pagination aria-label="Page navigation example">
-            <PaginationItem>
-              <PaginationLink
-                first
-                href="#"
-                onClick={() => {
-                  setPage(1);
-                  loadCars();
-                }}
-              />
-            </PaginationItem>
-            <PaginationItem disabled={page === 1}>
-              <PaginationLink
-                href="#"
-                previous
-                onClick={() => {
-                  setPage(page - 1);
-                  loadCars();
-                }}
-              />
-            </PaginationItem>
-            <PaginationItem disabled={page === 100}>
-              <PaginationLink
-                href="#"
-                next
-                onClick={() => {
-                  setPage(page + 1);
-                  loadCars();
-                }}
-              />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                href="#"
-                last
-                onClick={() => {
-                  setPage(100);
-                  loadCars();
-                }}
-              />
-            </PaginationItem>
-          </Pagination> */}
+
+          {/* Pagination Cars */}
+          <div className="cars-pagination">
+            <p>
+              Showing {page * pageSize - (pageSize - 1)} to {page !== lastPage ? page * pageSize : carCount} of{' '}
+              {carCount} entries
+            </p>
+
+            <Pagination aria-label="Pagination-cars" size={'md'}>
+              <PaginationItem disabled={page === 1}>
+                <PaginationLink first href="#" onClick={() => handleClickPage({ page: 1 })}>
+                  First
+                </PaginationLink>
+              </PaginationItem>
+
+              <PaginationItem disabled={page === 1}>
+                <PaginationLink previous href="#" onClick={() => handleClickPage({ page: page - 1 })}>
+                  Previous
+                </PaginationLink>
+              </PaginationItem>
+
+              <PaginationItem disabled={page === lastPage}>
+                <PaginationLink next href="#" onClick={() => handleClickPage({ page: page + 1 })}>
+                  Next
+                </PaginationLink>
+              </PaginationItem>
+
+              <PaginationItem disabled={page === lastPage}>
+                <PaginationLink last href="#" onClick={() => handleClickPage({ page: lastPage })}>
+                  Last
+                </PaginationLink>
+              </PaginationItem>
+            </Pagination>
+          </div>
         </div>
 
         {/* modal confirmation delete */}

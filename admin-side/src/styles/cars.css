@@ -8,7 +8,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 2rem 24px;
 }
 
@@ -133,4 +133,9 @@
   background-color: #ffffff;
   border: 1px solid #0d28a6;
   border-radius: 2px;
+}
+
+.cars-pagination {
+  display: flex;
+  justify-content: space-between;
 }
