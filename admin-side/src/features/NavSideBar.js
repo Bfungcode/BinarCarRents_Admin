@@ -1,59 +1,83 @@
 import '../styles/NavandSideBar.css';
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { SVGDashboard, SVGDropdownMenu, SVGMenu, SVGSearch, SVGTruck } from '../vectors/navandsidebar-icon';
 
 const NavSideBar = ({ PageContent }) => {
-  const [isDashboard, setIsDashboard] = useState(true)
+  const [isDashboard, setIsDashboard] = useState(true);
+  const [isSidebarOpen, setIsSideBarOpen] = useState (true);
+  const location = useLocation();
+  const [isDBActive, setIsDBActive] = useState('nav-link');
+  const [isCarsActive, setIsCarsActive] = useState('');
+
+
   function onCars() {
-    setIsDashboard(false)
+    return (setIsDashboard (!isDashboard),
+    setIsDBActive(''),
+    setIsCarsActive('nav-link'))
   }
+  const cekdb = ()=> {
+    if (location.pathname === "/cars"){
+      return (onCars())
+    }
+  }
+  const toggle = ()=> {
+    setIsSideBarOpen(!isSidebarOpen)
+  }
+
+  useEffect(()=> {
+    cekdb()
+  },[])
+
+
   return (
+    
     <div className="Dashboard">
+    
       <div className="main-sidebar">
-        <div className="logo"> logo</div>
-        <div className="icon-dashboard">
-          {/* <SVGDashboard/>  */}
-          <p>Dashboard</p>
-        </div>
-        <div>
-          {/* <SVGTruck />  */}
+        <div className="square-logo">BR</div>
+        <NavLink to='/dashboard'  className={isDBActive}>
+          <div className="" id='sidebar-icon'>
+            <SVGDashboard/> 
+            <p>Dashboard</p>
+          </div>
+        </NavLink>
+        <NavLink to='/cars' className={isCarsActive}>
+        <div className='' id='sidebar-icon'>
+          <SVGTruck /> 
           <p>Cars</p>
         </div>
+        </NavLink>
       </div>
-      <div className="right-layout">
-        <div className="h-navbar">
-          <div className="logo">Binar-Car</div>
-          {/* <div> <SVGMenu /> </div> */}
-          <div className="searchbar">
-            <div className="input-group">
-              <div className="form-outline">
-                <input type="search" id="form1" className="form-control" placeholder="Search" />
-                <label className="form-label"></label>
-              </div>
-              <div className="search-button">Search</div>
-            </div>
-          </div>
-          <div>
-            <div className="acct-icon">U</div>
-            <p>Unis Badri</p>
-          </div>
-          {/* <div><SVGDropdownMenu /> </div> */}
-        </div>
-        <div className="sidebar-content">
-          <div className="sidebar">
-            <ul>
-              <li>CARS</li>
-              <li>List Car</li>
-            </ul>
-          </div>
-        </div>
+
+  
+
+     { isSidebarOpen === true ? <div className='hidden-bar' >
+        <div className="hidden-logo">Binar-Car</div>
+        <div className="sidebar">
+                {isDashboard ? (
+                  <div>
+                    <div id='menu'>DASHBOARD</div>
+                    <div className='activemenu'>Dashboard</div>
+                  </div>
+                ) :
+                  <div>
+                      <div id='menu'>CARS</div>
+                      <div className='activemenu'>List Car</div>
+                  </div>
+                }
+              </div>   
+
+      </div>: null }
+
         <div className='right-layout'>
           <div>
             <div className="h-navbar">
-              <div className="nav-logo">Binar-Car</div>
-              <div><SVGMenu /></div>
-
+              <div className='minimize'>
+                  <button className='toggle' onClick={toggle}><SVGMenu className="svgmenu" />
+                </button>
+                  
+                </div>
               <div className='searchbar'>
                 <div className="input-group searchgroup">
                   <div className="form-outline search-input">
@@ -75,25 +99,16 @@ const NavSideBar = ({ PageContent }) => {
               </div>
               <div className='dropdown'><SVGDropdownMenu /> </div>
             </div>
-            <div className="sidebar-content">
-              <div className="sidebar">
-                {isDashboard === true ? (
-                  <div>
-                    <div id='menu'>DASHBOARD</div>
-                    <div id='menu'>Dashboard</div>
-                  </div>
-                ) :
-                  <div>
-                    <div id='menu'>CARS</div>
-                    <div id='menu'>List Car</div>
-                  </div>
-                }
-              </div>
+
+
+            <div className="content">
+             
               <div><PageContent /></div>
             </div>
           </div>
         </div>
+      
       </div>
+  )
 }
-
-      export default NavSideBar;
+ export default NavSideBar;
