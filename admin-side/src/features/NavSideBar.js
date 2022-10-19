@@ -30,6 +30,7 @@ const NavSideBar = ({ PageContent }) => {
   },[])
 
 
+
   return (
     
     <div className="Dashboard">
@@ -50,6 +51,7 @@ const NavSideBar = ({ PageContent }) => {
         </NavLink>
       </div>
 
+        {console.log('status sidebar: ', isSidebarOpen)}
   
 
      { isSidebarOpen === true ? <div className='hidden-bar' >
@@ -100,9 +102,7 @@ const NavSideBar = ({ PageContent }) => {
               <div className='dropdown'><SVGDropdownMenu /> </div>
             </div>
 
-
-            <div className="content">
-             
+            <div className="content"> 
               <div><PageContent /></div>
             </div>
           </div>

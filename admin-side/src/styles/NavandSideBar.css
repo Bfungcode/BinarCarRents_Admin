@@ -12,6 +12,7 @@
   .hidden-bar{
     display: grid;
     grid-template-rows: 70px 1fr;
+    width: 220px;
   }
 
   .right-layout {
@@ -40,7 +41,7 @@
 }
 
 .nav-link{
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 #sidebar-icon {
@@ -166,6 +167,7 @@
   .content{
     display: grid;
     grid-template-columns: auto;
+    padding-left: 0%;
   }
   
   
@@ -175,6 +177,8 @@
     color: black;
     box-sizing: border-box;
     width: 220px;
+    padding-top: 25px;
+    padding-right: 0px;
   }
   .square-logo{
     width: 34px;
@@ -195,6 +199,7 @@
     line-height: 20px;
     font-size: 14px;
     height: 42px;
+    margin-bottom: 8px;
     
   }
 
