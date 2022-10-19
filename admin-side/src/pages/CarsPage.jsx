@@ -112,14 +112,20 @@ const CarsContent = () => {
   return (
     <>
       <div className="container" style={{ backgroundColor: '#F4F5F7' }}>
-        <div className="row m-3">
+        <div className="row mb-3 pt-4" style={{ position: 'relative' }}>
           <div className="col-9">
             <p className="fw-bold" style={{ fontSize: '20px' }}>
               List Cars
             </p>
           </div>
           <div className="col-3">
-            <Link to={'/cars/add'}>
+            <Link
+              to={'/cars/add'}
+              style={{
+                position: 'absolute',
+                right: '2.2rem'
+              }}
+            >
               <Button className="btn-add-new">+ Add New Car</Button>
             </Link>
           </div>
@@ -203,34 +209,37 @@ const CarsContent = () => {
                     <p className="mb-0 ">{car.category || 'N/A'}</p>
                   </div>
                   <br />
-                  <div className="d-inline-flex mt-3 mb-2">
-                    <div style={{ marginRight: '0.5rem' }}>
-                      <SVGClock />
-                    </div>
-                    <p>Updated at {new Date(car.updatedAt).toUTCString()}</p>
-                  </div>
-                  <div className="d-grid btn-action-group">
-                    <Button
-                      onClick={() => {
-                        setId(car.id);
-                        toggle();
-                      }}
-                      className="btn-delete-car"
-                      key={'del-' + index}
-                    >
-                      <div className="btn-car-flex">
-                        <SVGTrash />
-                        Delete
+
+                  <div className="d-grid car-item-footer">
+                    <div className="d-inline-flex mt-3 mb-2">
+                      <div style={{ marginRight: '0.5rem' }}>
+                        <SVGClock />
                       </div>
-                    </Button>
-                    <Link key={index} to={`/cars/${car.id}`}>
-                      <Button key={index} className="btn-choose-car car-text-bold">
+                      <p>Updated at {new Date(car.updatedAt).toUTCString()}</p>
+                    </div>
+                    <div className="d-grid btn-action-group">
+                      <Button
+                        onClick={() => {
+                          setId(car.id);
+                          toggle();
+                        }}
+                        className="btn-delete-car"
+                        key={'del-' + index}
+                      >
                         <div className="btn-car-flex">
-                          <SVGEdit />
-                          Edit
+                          <SVGTrash />
+                          Delete
                         </div>
                       </Button>
-                    </Link>
+                      <Link key={index} to={`/cars/${car.id}`}>
+                        <Button key={index} className="btn-choose-car car-text-bold">
+                          <div className="btn-car-flex">
+                            <SVGEdit />
+                            Edit
+                          </div>
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               );

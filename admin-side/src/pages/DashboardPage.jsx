@@ -186,7 +186,7 @@ const DashboardContent = () => {
   return (
     <>
       <div className="container" style={{ backgroundColor: '#F4F5F7' }}>
-        <div className="row">
+        <div className="row pt-4">
           <div className="col-3">
             <div className="d-flex">
               <div className="title-square"></div>
