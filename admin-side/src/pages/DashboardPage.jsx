@@ -1,14 +1,14 @@
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
 import Moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import DataTable from 'react-data-table-component';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input, Label } from 'reactstrap';
+import { changeOrderStatus, getAllOrder, getListOrder } from '../features/Admin/adminSlice';
 import NavSideBar from '../features/NavSideBar';
 import './../styles/Dashboard.css';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -17,9 +17,9 @@ const DashboardContent = () => {
   const [barOrders, setBarOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChart, setLoadingChart] = useState(false);
-  const controller = new AbortController();
   const { isLoggedIn } = useSelector(state => state.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [totalRows, setTotalRows] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -27,52 +27,48 @@ const DashboardContent = () => {
 
   const loadOrders = async (page, rows, sortField, sortDirection) => {
     page = page || 1;
-    const user = JSON.parse(localStorage.getItem("user"))
 
     setLoading(true);
-    await axios
-      .get('https://bootcamp-rent-cars.herokuapp.com/admin/v2/order', {
-        signal: controller.signal,
-        headers: {
-          "Content-Type": "application/json",
-          access_token: user.access_token,
-        },
-        params: {
-          page,
-          pageSize: rows || rowsPerPage,
-          sort: sortField ? `${sortField}:${sortDirection}` : 'created_at:desc'
-        },
+
+    dispatch(
+      getListOrder({
+        page,
+        pageSize: rows || rowsPerPage,
+        sort: sortField ? `${sortField}:${sortDirection}` : 'created_at:desc'
       })
-      .then(response => {
-        setOrders(response.data.orders);
-        setTotalRows(response.data.count);
-        setRowsPerPage(response.data.pageSize);
+    )
+      .unwrap()
+      .then(data => {
+        setOrders(data.orders);
+        setTotalRows(data.count);
+        setRowsPerPage(data.pageSize);
+        setLoading(false);
       })
-      .catch(err => console.error(err));
-    setLoading(false);
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
   };
 
   const loadOrderReport = async month => {
     month = month || new Date().getMonth();
     setLoadingChart(true);
-    const user = JSON.parse(localStorage.getItem("user"))
-    await axios
-      .get('https://bootcamp-rent-cars.herokuapp.com/admin/order/reports', {
-        signal: controller.signal,
-        headers: {
-          "Content-Type": "application/json",
-          access_token: user.access_token,
-        },
-        params: {
-          from: Moment(new Date(2022, month, 1)).format('YYYY-MM-DD'),
-          until: Moment(new Date(2022, month + 1, 0)).format('YYYY-MM-DD')
-        }
+
+    dispatch(
+      getAllOrder({
+        from: Moment(new Date(2022, month, 1)).format('YYYY-MM-DD'),
+        until: Moment(new Date(2022, month + 1, 0)).format('YYYY-MM-DD')
       })
-      .then(response => {
-        setBarOrders(response.data);
+    )
+      .unwrap()
+      .then(data => {
+        setBarOrders(data);
+        setLoadingChart(false);
       })
-      .catch(err => console.error(err));
-    setLoadingChart(false);
+      .catch(err => {
+        console.error(err);
+        setLoadingChart(false);
+      });
   };
 
   useEffect(() => {
@@ -141,9 +137,9 @@ const DashboardContent = () => {
       selector: row =>
         row.total_price
           ? row.total_price.toLocaleString('id-ID', {
-            style: 'currency',
-            currency: 'IDR'
-          })
+              style: 'currency',
+              currency: 'IDR'
+            })
           : '-',
       sortable: true,
       sortField: 'total_price'
@@ -161,19 +157,11 @@ const DashboardContent = () => {
   ];
 
   const doChangeStatus = async id => {
-    await axios
-      .patch(
-        `https://bootcamp-rent-cars.herokuapp.com/admin/order/${id}`,
-        { status: 1 },
-        {
-          signal: controller.signal,
-          headers: {
-            access_token: localStorage.getItem('access_token')
-          }
-        }
-      )
+    dispatch(changeOrderStatus({ id, status: 1 }))
+      .unwrap()
       .then(response => {
-        alert(response.data.message);
+        console.log(response);
+        alert(response.name + '! ' + response.message);
         // loadOrderReport(); set combobox to default value
       })
       .catch(err => {
@@ -198,7 +186,7 @@ const DashboardContent = () => {
   return (
     <>
       <div className="container" style={{ backgroundColor: '#F4F5F7' }}>
-        <div className="row">
+        <div className="row pt-4">
           <div className="col-3">
             <div className="d-flex">
               <div className="title-square"></div>
@@ -242,7 +230,9 @@ const DashboardContent = () => {
         <div className="row">
           <div className="col">
             {loadingChart && <p className="text-center">Getting order data...</p>}
-            {!loadingChart && <Bar style={{ background: '#f4f5f7' }} options={barOptions} data={barData}></Bar>}
+            {!loadingChart && (
+              <Bar style={{ background: '#f4f5f7', width: '100%' }} options={barOptions} data={barData}></Bar>
+            )}
           </div>
         </div>
 

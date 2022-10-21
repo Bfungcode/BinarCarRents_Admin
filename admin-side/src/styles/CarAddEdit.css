@@ -1,3 +1,15 @@
 .add-edit-form {
   padding-top: 2rem;
 }
+
+.btn-car-save {
+  background-color: #0d28a6;
+  border-radius: 2px;
+}
+
+.btn-car-cancel {
+  color: #0d28a6;
+  background-color: #ffffff;
+  border: 1px solid #0d28a6;
+  border-radius: 2px;
+}

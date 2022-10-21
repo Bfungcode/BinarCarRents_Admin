@@ -6,13 +6,12 @@
     right: 0;
     gap: 0;
     margin: 0;
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto 1fr;
   }
 
   .hidden-bar{
     display: grid;
     grid-template-rows: 70px 1fr;
-    width: 220px;
   }
 
   .right-layout {
@@ -32,59 +31,67 @@
   color: #FFF;
   width: 70px;
 }
-.main-sidebar a {
-  text-decoration: none;
-  color: white;
-}
-.main-sidebar a.active {
+
+.square-logo{
+  width: 34px;
+  height: 34px;
+  background: #CFD4ED;
+  color: black;
   font-weight: 700;
+  margin: 18px;
+  margin-bottom: 30px;
+  border: none;
+  padding: 6px;
 }
 
 .nav-link{
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 #sidebar-icon {
   height: 64px;
   padding-top: 10px;
-  text-decoration: none;
+  height: 64px;
 }
-#sidebar-icon > p  {
+.icon-dashboard > p{
   font-size: 12px;
   font-family: 'Arial';
-  text-decoration: none;
 }
-
-#sidebar-icon:hover{
+.icon-dashboard:hover{
   background: rgba(255, 255, 255, 0.08);
   cursor: pointer;
   font-weight: 700;
   }
 
+.icon-cars{
+  height: 64px;
+  padding-top: 10px;
+}
+.icon-cars > p {
+  font-size: 12px;
+  font-family: 'Arial';
+  text-decoration: none;
+}
+
+.icon-cars:hover{
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  font-weight: 700;
+}
 
 
   /* Navbar */
   .h-navbar{
     display: grid;
-    grid-template-columns: auto 1fr auto auto;
+    grid-template-columns: auto auto 1fr auto auto;
     align-items: center;
     background-color: #fff;
     box-sizing: border-box;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
-    padding-right: 30px;
+    padding-right: 10px;
+    /* padding-right: sementara; */
   }
-  .toggle{
-    background-color: none;
-    border: none;
-  }
-  .minimize:hover{
-    cursor: pointer;
-    background: rgba(0, 0, 0, 0.05);
-    padding: 3px;
-  }
-
-/* dari nav-bar logo ganti jadi .hidden-logo */
-  .hidden-logo{
+  .nav-logo{
     height: 34px;
     width: 100px;
     background: #CFD4ED;
@@ -94,7 +101,6 @@
     text-align: center;
     padding-top: 6px;
     margin-left: 24px;
-    margin-top: 18px;
     margin-right: 100px;
   }
   .searchgroup{
@@ -103,8 +109,6 @@
     justify-content: end;
     align-items: center;
   }
-
-
   .search-input{
     display: grid;
     grid-template-columns: auto auto auto;
@@ -162,12 +166,14 @@
   }
   
   
+  
+  
 
   
-  .content{
+  
+  .sidebar-content{
     display: grid;
     grid-template-columns: auto;
-    padding-left: 0%;
   }
   
   
@@ -177,38 +183,20 @@
     color: black;
     box-sizing: border-box;
     width: 220px;
-    padding-top: 25px;
-    padding-right: 0px;
+    padding-top: 32px;
   }
-  .square-logo{
-    width: 34px;
-    height: 34px;
-    background: #CFD4ED;
-    color: black;
-    font-weight: 700;
-    margin: 18px;
-    margin-bottom: 30px;
-    border: none;
-    padding: 6px;
-  }
-
-
   #menu{
     padding: 11px 24px;
     color: #8A8A8A;
     line-height: 20px;
     font-size: 14px;
     height: 42px;
-    margin-bottom: 8px;
-    
   }
-
-  .activemenu{
-    padding: 11px 24px;
+  
+  #menu:hover{
     background-color: #CFD4ED;
     font-weight: 700;
     color: black;
-    text-decoration: none
   }
   
   .content{

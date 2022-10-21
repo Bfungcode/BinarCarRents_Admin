@@ -1,14 +1,14 @@
 .car-result {
   margin-top: 3rem;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 1%;
+  margin-right: 1%;
   /* display: grid;
     grid-template-columns: repeat(3, auto); */
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 2rem 24px;
 }
 
@@ -80,7 +80,7 @@
 .btn-add-new {
   background-color: #0d28a6;
   border-radius: 2px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .btn-category {
@@ -95,4 +95,47 @@
   border: 1px solid #0d28a6;
   border-radius: 2px;
   color: #0d28a6;
+}
+
+.toast-save-success {
+  background-color: #73ca5c;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  color: white;
+  width: 550px;
+  height: 48px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+}
+
+.toast-delete-success {
+  background-color: #151515;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  color: white;
+  width: 550px;
+  height: 48px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+}
+
+.btn-modal-yes {
+  background-color: #0d28a6;
+  border-radius: 2px;
+}
+
+.btn-modal-no {
+  color: #0d28a6;
+  background-color: #ffffff;
+  border: 1px solid #0d28a6;
+  border-radius: 2px;
+}
+
+.cars-pagination {
+  display: flex;
+  justify-content: space-between;
 }
