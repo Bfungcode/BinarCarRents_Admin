@@ -5,7 +5,6 @@ import { SVGDashboard, SVGDropdownMenu, SVGMenu, SVGSearch, SVGTruck } from '../
 
 const NavSideBar = ({ PageContent }) => {
   const [isDashboard, setIsDashboard] = useState(true);
-  const [isSidebarOpen, setIsSideBarOpen] = useState(true);
   const location = useLocation();
   const [isDBActive, setIsDBActive] = useState('nav-link');
   const [isCarsActive, setIsCarsActive] = useState('');
@@ -21,9 +20,7 @@ const NavSideBar = ({ PageContent }) => {
       return (onCars())
     }
   }
-  const toggle = () => {
-    setIsSideBarOpen(!isSidebarOpen)
-  }
+
 
   useEffect(() => {
     cekdb()
@@ -51,12 +48,12 @@ const NavSideBar = ({ PageContent }) => {
         </NavLink>
       </div>
 
-      {console.log('status sidebar: ', isSidebarOpen)}
+     
 
 
-      {isSidebarOpen === true ? <div className='hidden-bar' >
+      <div className='hidden-bar' >
         <div className="hidden-logo">Binar-Car</div>
-        <div className="sidebar">
+        {/* <div className="sidebar">
           {isDashboard ? (
             <div>
               <div id='menu'>DASHBOARD</div>
@@ -68,15 +65,15 @@ const NavSideBar = ({ PageContent }) => {
               <div className='activemenu'>List Car</div>
             </div>
           }
-        </div>
+        </div> */}
 
-      </div> : null}
+      </div>
 
       <div className='right-layout'>
         <div>
           <div className="h-navbar">
             <div className='minimize'>
-              <button className='toggle' onClick={toggle}><SVGMenu className="svgmenu" />
+              <button className='toggle'><SVGMenu className="svgmenu" />
               </button>
 
             </div>
@@ -121,14 +118,7 @@ const NavSideBar = ({ PageContent }) => {
       </div>
 
     </div>
-<<<<<<< HEAD
-    </div >
   )
 }
 
 export default NavSideBar;
-=======
-  )
-}
- export default NavSideBar;
->>>>>>> 4fa297192dae38dfa075e93a2f7e512a834c7bc2
