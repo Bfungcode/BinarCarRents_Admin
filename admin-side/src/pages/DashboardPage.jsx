@@ -230,7 +230,9 @@ const DashboardContent = () => {
         <div className="row">
           <div className="col">
             {loadingChart && <p className="text-center">Getting order data...</p>}
-            {!loadingChart && <Bar style={{ background: '#f4f5f7' }} options={barOptions} data={barData}></Bar>}
+            {!loadingChart && (
+              <Bar style={{ background: '#f4f5f7', width: '100%' }} options={barOptions} data={barData}></Bar>
+            )}
           </div>
         </div>
 
