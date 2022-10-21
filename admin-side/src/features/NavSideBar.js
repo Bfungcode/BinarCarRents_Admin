@@ -121,14 +121,7 @@ const NavSideBar = ({ PageContent }) => {
       </div>
 
     </div>
-<<<<<<< HEAD
-    </div >
   )
 }
 
 export default NavSideBar;
-=======
-  )
-}
- export default NavSideBar;
->>>>>>> 4fa297192dae38dfa075e93a2f7e512a834c7bc2
