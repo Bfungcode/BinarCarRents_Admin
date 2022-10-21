@@ -8,12 +8,6 @@
     margin: 0;
     grid-template-columns: auto 1fr;
   }
-
-  .hidden-bar{
-    display: grid;
-    grid-template-rows: 70px 1fr;
-  }
-
   .right-layout {
     display: grid;
     padding-top: 18;
@@ -44,12 +38,7 @@
   padding: 6px;
 }
 
-.nav-link{
-  background: rgba(255, 255, 255, 0.08);
-}
-
-#sidebar-icon {
-  height: 64px;
+.icon-dashboard{
   padding-top: 10px;
   height: 64px;
 }
@@ -173,7 +162,7 @@
   
   .sidebar-content{
     display: grid;
-    grid-template-columns: auto;
+    grid-template-columns: auto 1fr;
   }
   
   
