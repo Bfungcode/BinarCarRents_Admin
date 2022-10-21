@@ -120,7 +120,7 @@ const CarAddEditContent = () => {
 
   return (
     <>
-      <div className="container mt-3" style={{ backgroundColor: '#F4F5F7' }}>
+      <div className="container mb-3 pt-4" style={{ backgroundColor: '#F4F5F7' }}>
         {error && <p>Error! {error}</p>}
         <div className="row">
           <div className="col">
@@ -142,7 +142,7 @@ const CarAddEditContent = () => {
                         value={formik.values.name}
                       ></Input>
                       {formik.touched.name && formik.errors.name && (
-                        <p className="text-danger"> {formik.errors.name} </p>
+                        <small className="text-danger"> {formik.errors.name} </small>
                       )}
                     </Col>
                   </FormGroup>
@@ -159,7 +159,7 @@ const CarAddEditContent = () => {
                         value={formik.values.price}
                       ></Input>
                       {formik.touched.price && formik.errors.price && (
-                        <p className="text-danger"> {formik.errors.price} </p>
+                        <small className="text-danger"> {formik.errors.price} </small>
                       )}
                     </Col>
                   </FormGroup>
@@ -182,7 +182,7 @@ const CarAddEditContent = () => {
 
                       <FormText>File size max. 2MB</FormText>
                       {formik.touched.image && formik.errors.image && (
-                        <p className="text-danger"> {formik.errors.image} </p>
+                        <small className="text-danger"> {formik.errors.image} </small>
                       )}
                     </Col>
                   </FormGroup>
@@ -207,7 +207,7 @@ const CarAddEditContent = () => {
                         <option value={'large'}>large</option>
                       </Input>
                       {formik.touched.category && formik.errors.category && (
-                        <p className="text-danger"> {formik.errors.category} </p>
+                        <small className="text-danger"> {formik.errors.category} </small>
                       )}
                     </Col>
                   </FormGroup>
