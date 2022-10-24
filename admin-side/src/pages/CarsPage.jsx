@@ -146,24 +146,39 @@ const CarsContent = () => {
 
         <div className="row">
           <div className="d-flex" style={{ columnGap: '1rem' }}>
-            <Button className={(activeCategory === '' ? 'active-ct' : '') + 'btn-category'} onClick={loadCars}>
+            <Button
+              className={(activeCategory === '' ? 'active-ct' : '') + 'btn-category'}
+              onClick={() => {
+                setPage(1);
+                loadCars();
+              }}
+            >
               All
             </Button>
             <Button
               className={(activeCategory === 'small' ? 'active-ct' : '') + 'btn-category'}
-              onClick={() => doFilterCars('small')}
+              onClick={() => {
+                setPage(1);
+                doFilterCars('small');
+              }}
             >
               Small
             </Button>
             <Button
               className={(activeCategory === 'medium' ? 'active-ct' : '') + 'btn-category'}
-              onClick={() => doFilterCars('medium')}
+              onClick={() => {
+                setPage(1);
+                doFilterCars('medium');
+              }}
             >
               Medium
             </Button>
             <Button
               className={(activeCategory === 'large' ? 'active-ct' : '') + 'btn-category'}
-              onClick={() => doFilterCars('large')}
+              onClick={() => {
+                setPage(1);
+                doFilterCars('large');
+              }}
             >
               Large
             </Button>
