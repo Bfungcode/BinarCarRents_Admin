@@ -175,7 +175,6 @@ const CarsContent = () => {
             <Button
               className={(activeCategory === 'large' ? 'active-ct' : '') + 'btn-category'}
               onClick={() => {
-                setPage(1);
                 doFilterCars({ category: 'large', page: 1 });
               }}
             >
