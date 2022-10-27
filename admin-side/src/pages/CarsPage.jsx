@@ -65,8 +65,9 @@ const CarsContent = () => {
     localStorage.removeItem('responseStatus');
   };
 
-  const doFilterCars = async category => {
+  const doFilterCars = async ({ category, page }) => {
     setActiveCategory(category);
+    setPage(page);
     getCars({ category, page });
   };
 
@@ -158,8 +159,7 @@ const CarsContent = () => {
             <Button
               className={(activeCategory === 'small' ? 'active-ct' : '') + 'btn-category'}
               onClick={() => {
-                setPage(1);
-                doFilterCars('small');
+                doFilterCars({ category: 'small', page: 1 });
               }}
             >
               Small
@@ -167,8 +167,7 @@ const CarsContent = () => {
             <Button
               className={(activeCategory === 'medium' ? 'active-ct' : '') + 'btn-category'}
               onClick={() => {
-                setPage(1);
-                doFilterCars('medium');
+                doFilterCars({ category: 'medium', page: 1 });
               }}
             >
               Medium
@@ -177,7 +176,7 @@ const CarsContent = () => {
               className={(activeCategory === 'large' ? 'active-ct' : '') + 'btn-category'}
               onClick={() => {
                 setPage(1);
-                doFilterCars('large');
+                doFilterCars({ category: 'large', page: 1 });
               }}
             >
               Large
