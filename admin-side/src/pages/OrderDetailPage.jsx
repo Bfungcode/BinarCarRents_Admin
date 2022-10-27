@@ -54,30 +54,30 @@ const OrderDetailContent = () => {
             </div>
 
             <div className="row">
-              <div className="col-4">User Email</div>
-              <div className="col-8">{order?.User?.email || '-'}</div>
+              <div className="col-3">User Email</div>
+              <div className="col">{order?.User?.email || '-'}</div>
             </div>
             <div className="row">
-              <div className="col-4">Status</div>
+              <div className="col-3">Status</div>
               <div className="col">{order?.status ? 'Rented' : 'Available'}</div>
             </div>
             <div className="row">
-              <div className="col-4">Rental Date</div>
+              <div className="col-3">Rental Date</div>
               <div className="col">
                 {order?.start_rent_at ? new Date(order?.start_rent_at).toDateString() : '-'} -{' '}
                 {order?.finish_rent_at ? new Date(order?.finish_rent_at).toDateString() : '-'}
               </div>
             </div>
             <div className="row">
-              <div className="col-4">Car</div>
+              <div className="col-3">Car</div>
               <div className="col">{order?.Car?.name || '-'}</div>
             </div>
             <div className="row">
-              <div className="col-4">Category</div>
+              <div className="col-3">Category</div>
               <div className="col">{order?.Car?.category || '-'}</div>
             </div>
             <div className="row">
-              <div className="col-4">Price</div>
+              <div className="col-3">Price</div>
               <div className="col">
                 {order?.total_price
                   ? order?.total_price.toLocaleString('id-ID', {
@@ -88,7 +88,7 @@ const OrderDetailContent = () => {
               </div>
             </div>
             <div className="row">
-              <div className="col-4">Payment Slip</div>
+              <div className="col-3">Payment Slip</div>
               <div className="col">
                 {order?.slip ? (
                   <p>
