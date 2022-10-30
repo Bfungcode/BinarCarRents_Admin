@@ -97,30 +97,27 @@
   color: #0d28a6;
 }
 
-.toast-save-success {
-  background-color: #73ca5c;
+.toast-cars {
+  position: absolute;
+  left: 50%;
+  transform: translate(-55%, 20%);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   color: white;
   width: 550px;
   height: 48px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 16px;
   line-height: 24px;
   text-align: center;
 }
 
+.toast-save-success {
+  background-color: #73ca5c;
+}
+
 .toast-delete-success {
   background-color: #151515;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  color: white;
-  width: 550px;
-  height: 48px;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-  text-align: center;
 }
 
 .btn-modal-yes {

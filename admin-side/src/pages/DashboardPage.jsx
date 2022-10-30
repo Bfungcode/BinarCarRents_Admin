@@ -1,4 +1,4 @@
-import { faPencil } from '@fortawesome/free-solid-svg-icons';
+import { faPencil, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
 import Moment from 'moment';
@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import DataTable from 'react-data-table-component';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Input, Label } from 'reactstrap';
 import { changeOrderStatus, getAllOrder, getListOrder } from '../features/Admin/adminSlice';
 import NavSideBar from '../features/NavSideBar';
@@ -44,8 +44,7 @@ const DashboardContent = () => {
         setRowsPerPage(data.pageSize);
         setLoading(false);
       })
-      .catch(err => {
-        console.error(err);
+      .catch(() => {
         setLoading(false);
       });
   };
@@ -65,8 +64,7 @@ const DashboardContent = () => {
         setBarOrders(data);
         setLoadingChart(false);
       })
-      .catch(err => {
-        console.error(err);
+      .catch(() => {
         setLoadingChart(false);
       });
   };
@@ -147,9 +145,16 @@ const DashboardContent = () => {
     { name: 'Category', selector: row => row.Car?.category || '-', sortable: true, sortField: 'category' },
     {
       cell: row => (
-        <Button size="sm" color="info" title="Change Status" onClick={() => doChangeStatus(row.id)}>
-          <FontAwesomeIcon icon={faPencil} size="sm" />
-        </Button>
+        <div className="d-flex justify-content-sm-start" style={{ columnGap: '0.5rem' }}>
+          <Button size="sm" color="primary" title="Change Status" onClick={() => doChangeStatus(row.id)}>
+            <FontAwesomeIcon icon={faPencil} size="sm" />
+          </Button>
+          <Link to={`/dashboard/${row.id}`}>
+            <Button size="sm" color="secondary" title="View Detail">
+              <FontAwesomeIcon icon={faSearch} size="sm" />
+            </Button>
+          </Link>
+        </div>
       ),
       button: true,
       name: 'Action'
@@ -160,12 +165,11 @@ const DashboardContent = () => {
     dispatch(changeOrderStatus({ id, status: 1 }))
       .unwrap()
       .then(response => {
-        console.log(response);
         alert(response.name + '! ' + response.message);
-        // loadOrderReport(); set combobox to default value
+        loadOrderReport(); // set combobox to default value
+        document.getElementById('selectMonth').value = new Date().getMonth();
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
         alert('Error change status!');
       });
   };
@@ -196,9 +200,9 @@ const DashboardContent = () => {
         </div>
         <div className="row mb-3">
           <div className="col-3">
-            <Label for="exampleSelect">Month</Label>
+            <Label for="selectMonth">Month</Label>
             <Input
-              id="exampleSelect"
+              id="selectMonth"
               name="selectMonth"
               type="select"
               onChange={e => loadOrderReport(+e.target.value)}

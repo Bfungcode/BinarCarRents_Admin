@@ -40,8 +40,7 @@ const CarAddEditContent = () => {
       /** add new */
       dispatch(postCar(values))
         .unwrap()
-        .then(response => {
-          console.log(response);
+        .then(() => {
           actions.setSubmitting(false);
           actions.resetForm();
           localStorage.setItem('responseStatus', 'OK');
@@ -49,7 +48,6 @@ const CarAddEditContent = () => {
           navigate('/cars');
         })
         .catch(error => {
-          console.error(error);
           actions.setSubmitting(false);
           setError(error);
         });
@@ -69,8 +67,7 @@ const CarAddEditContent = () => {
         setCar(data);
         setLoading(false);
       })
-      .catch(error => {
-        console.error(error);
+      .catch(() => {
         setLoading(false);
       });
   };
@@ -113,14 +110,13 @@ const CarAddEditContent = () => {
       category: Yup.string().required('pilih salah satu')
     }),
     onSubmit: (values, actions) => {
-      console.log(values);
       handleSubmit(values, actions);
     }
   });
 
   return (
     <>
-      <div className="container mb-3 pt-4" style={{ backgroundColor: '#F4F5F7' }}>
+      <div className="container mb-3 py-4" style={{ backgroundColor: '#F4F5F7' }}>
         {error && <p>Error! {error}</p>}
         <div className="row">
           <div className="col">

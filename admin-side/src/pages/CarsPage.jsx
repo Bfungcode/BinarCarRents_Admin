@@ -65,8 +65,9 @@ const CarsContent = () => {
     localStorage.removeItem('responseStatus');
   };
 
-  const doFilterCars = async category => {
+  const doFilterCars = async ({ category, page }) => {
     setActiveCategory(category);
+    setPage(page);
     getCars({ category, page });
   };
 
@@ -83,8 +84,7 @@ const CarsContent = () => {
         setCarCount(data.count);
         setLoading(false);
       })
-      .catch(err => {
-        console.error(err);
+      .catch(() => {
         setLoading(false);
       });
   };
@@ -99,7 +99,7 @@ const CarsContent = () => {
           setToastDelete(false);
         }, 4000);
       })
-      .catch(err => console.error(err));
+      .catch(() => {});
 
     setModal(false);
   };
@@ -112,7 +112,7 @@ const CarsContent = () => {
   return (
     <>
       <div className="container" style={{ backgroundColor: '#F4F5F7' }}>
-        <div className="row mb-3 pt-4" style={{ position: 'relative' }}>
+        <div className="row pt-4 mb-3" style={{ position: 'relative' }}>
           <div className="col-9">
             <p className="fw-bold" style={{ fontSize: '20px' }}>
               List Cars
@@ -129,49 +129,54 @@ const CarsContent = () => {
               <Button className="btn-add-new">+ Add New Car</Button>
             </Link>
           </div>
-        </div>
-        {/* toast save success */}
-        {toastSave && (
-          <div className="row">
-            <div className="col d-grid justify-content-center">
-              <Toast isOpen={toastSave} fade className="toast-save-success">
-                <ToastBody>Data Berhasil Disimpan</ToastBody>
-              </Toast>
-            </div>
-          </div>
-        )}
 
-        {/* toast delete success */}
-        {toastDelete && (
-          <div className="row">
-            <div className="col d-grid justify-content-center">
-              <Toast isOpen={toastDelete} fade className="toast-delete-success">
-                <ToastBody>Data Berhasil Dihapus</ToastBody>
-              </Toast>
-            </div>
-          </div>
-        )}
+          {/* toast save success */}
+          {toastSave && (
+            <Toast fade className="toast-cars toast-save-success">
+              <ToastBody>Data Berhasil Disimpan</ToastBody>
+            </Toast>
+          )}
+
+          {/* toast delete success */}
+          {toastDelete && (
+            <Toast isOpen={toastDelete} fade className="toast-cars toast-delete-success">
+              <ToastBody>Data Berhasil Dihapus</ToastBody>
+            </Toast>
+          )}
+        </div>
 
         <div className="row">
           <div className="d-flex" style={{ columnGap: '1rem' }}>
-            <Button className={(activeCategory === '' ? 'active-ct' : '') + 'btn-category'} onClick={loadCars}>
+            <Button
+              className={(activeCategory === '' ? 'active-ct' : '') + 'btn-category'}
+              onClick={() => {
+                setPage(1);
+                loadCars();
+              }}
+            >
               All
             </Button>
             <Button
               className={(activeCategory === 'small' ? 'active-ct' : '') + 'btn-category'}
-              onClick={() => doFilterCars('small')}
+              onClick={() => {
+                doFilterCars({ category: 'small', page: 1 });
+              }}
             >
               Small
             </Button>
             <Button
               className={(activeCategory === 'medium' ? 'active-ct' : '') + 'btn-category'}
-              onClick={() => doFilterCars('medium')}
+              onClick={() => {
+                doFilterCars({ category: 'medium', page: 1 });
+              }}
             >
               Medium
             </Button>
             <Button
               className={(activeCategory === 'large' ? 'active-ct' : '') + 'btn-category'}
-              onClick={() => doFilterCars('large')}
+              onClick={() => {
+                doFilterCars({ category: 'large', page: 1 });
+              }}
             >
               Large
             </Button>
