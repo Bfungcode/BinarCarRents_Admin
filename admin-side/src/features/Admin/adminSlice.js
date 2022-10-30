@@ -118,6 +118,17 @@ export const getListOrder = createAsyncThunk('admin/getListOrder', async ({ sort
     return thunkAPI.rejectWithValue();
   }
 });
+export const getOrderDetail = createAsyncThunk('admin/getListOrder', async ({ id }, thunkAPI) => {
+  try {
+    const response = await adminAPI.getOrderDetail(id);
+    thunkAPI.dispatch(setMessage('done'));
+    return response.data;
+  } catch (err) {
+    const message = err.message.data || err.message || err.message.toString();
+    thunkAPI.dispatch(setMessage(message));
+    return thunkAPI.rejectWithValue();
+  }
+});
 
 const initialState = {
   cars: null,
@@ -186,6 +197,12 @@ const adminSlice = createSlice({
       state.orders = action.payload;
     },
     [getListOrder.rejected]: (state, action) => {
+      state.orders = null;
+    },
+    [getOrderDetail.fulfilled]: (state, action) => {
+      state.orders = action.payload;
+    },
+    [getOrderDetail.rejected]: (state, action) => {
       state.orders = null;
     }
   }

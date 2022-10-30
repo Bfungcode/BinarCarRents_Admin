@@ -1,29 +1,24 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from 'reactstrap';
+import { useDispatch } from 'react-redux';
 import NavSideBar from '../features/NavSideBar';
+import { getOrderDetail } from '../features/Admin/adminSlice';
+import { setMessage } from '../auth/message-slice';
 
 const OrderDetailContent = () => {
   const { orderId } = useParams();
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState();
-
+  const dispatch = useDispatch();
   const loadOrder = async () => {
     setLoading(true);
-    await axios
-      .get(`https://bootcamp-rent-cars.herokuapp.com/admin/order/${orderId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          access_token: JSON.parse(localStorage.getItem('user')).access_token
-        }
-      })
-      .then(response => {
-        setOrder(response.data);
-      })
-      .catch(() => {});
+    dispatch(getOrderDetail({ id: orderId }))
+      .unwrap()
+      .then((data) => { setOrder(data) })
+      .catch(err => dispatch(setMessage(err)))
     setLoading(false);
-  };
+  }
 
   useEffect(() => {
     loadOrder();
@@ -81,9 +76,9 @@ const OrderDetailContent = () => {
               <div className="col">
                 {order?.total_price
                   ? order?.total_price.toLocaleString('id-ID', {
-                      style: 'currency',
-                      currency: 'IDR'
-                    })
+                    style: 'currency',
+                    currency: 'IDR'
+                  })
                   : '-'}
               </div>
             </div>

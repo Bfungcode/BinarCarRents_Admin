@@ -10,7 +10,7 @@ const login = (email, password) => {
   })
     .then((res) => {
       if (res.data.access_token) {
-        localStorage.setItem("user", JSON.stringify(res.data));
+        localStorage.setItem("admin", JSON.stringify(res.data));
       }
       return res.data
     })

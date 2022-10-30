@@ -1,6 +1,6 @@
 import axios from 'axios';
 const API_URL = 'https://bootcamp-rent-cars.herokuapp.com/';
-const user = JSON.parse(localStorage.getItem('user'));
+const user = JSON.parse(localStorage.getItem('admin'));
 
 const getAllCars = (name, category, isRented, minPrice, maxPrice, page, pageSize) => {
   const response = axios.get(`${API_URL}admin/v2/car`, {
@@ -136,6 +136,15 @@ const getListOrder = (sort, page, pageSize) => {
   });
   return response;
 };
+const getOrderDetail = (id) => {
+  const response = axios.get(`${API_URL}admin/order/${id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      access_token: user.access_token
+    }
+  });
+  return response;
+}
 
 const adminAPI = {
   getAllCars,
@@ -147,7 +156,8 @@ const adminAPI = {
   getOrderById,
   changeOrderStatus,
   deleteOrder,
-  getListOrder
+  getListOrder,
+  getOrderDetail
 };
 
 export default adminAPI;

@@ -1,10 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authAPI from './auth-API';
 import { setMessage } from './message-slice';
-
-
-
-const user = JSON.parse(localStorage.getItem('user'));
+const user = JSON.parse(localStorage.getItem('admin'));
 
 export const login = createAsyncThunk("auth/login",
   async ({ email, password }, thunkAPI) => {
@@ -24,7 +21,6 @@ export const login = createAsyncThunk("auth/login",
 
 const initialState = user ? { isLoggedIn: true, user } :
   { isLoggedIn: false, user: null };
-//user && localstorage.getItem()
 
 
 const authSlice = createSlice({

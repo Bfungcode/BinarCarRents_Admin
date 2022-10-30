@@ -1,22 +1,24 @@
 import React from "react";
 import { useFormik } from 'formik';
 import * as yup from "yup";
-import { Router, useNavigate } from "react-router-dom";
-import '../App'
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from '../auth/auth-slice';
+import { setMessage } from "../auth/message-slice";
+import { Modal, ModalBody } from 'reactstrap';
+import '../App'
 
 
-const handleSubmit = async (values, actions, dispatch, navigate) => {
+const handleSubmit = async (values, actions, dispatch, navigate, toggle) => {
     const { email, password } = values;
     dispatch(login({ email, password }))
         .unwrap()
         .then(() => {
             navigate('/dashboard');
-
         })
         .catch(() => {
-            console.log('error');
+            dispatch(setMessage('error'));
+            toggle();
         })
 }
 
@@ -24,7 +26,8 @@ const LoginForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isLoggedIn } = useSelector((state) => state.auth)
-    // const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+    const [modal, setModal] = React.useState(false);
+    const toggle = () => setModal(!modal);
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -38,7 +41,7 @@ const LoginForm = () => {
                 .required('Required'),
         }),
         onSubmit: (values, actions) => {
-            handleSubmit(values, actions, dispatch, navigate)
+            handleSubmit(values, actions, dispatch, navigate, toggle)
         }
     });
     React.useEffect(() => {
@@ -48,6 +51,13 @@ const LoginForm = () => {
     }, [isLoggedIn])
     return (
         <div className="d-flex flex-column form-container">
+            <Modal isOpen={modal}
+                toggle={toggle}
+                modalTransition={{ timeout: 500 }}>
+                <ModalBody style={{ color: "red" }} >
+                    Sign In Gagal, Email atau Password Tidak Sesuai!
+                </ModalBody>
+            </Modal>
             <div className="logo"></div>
             <h3 className="welcome">Welcome, Admin Binar</h3>
             {formik.touched.email && formik.errors.email ? (
