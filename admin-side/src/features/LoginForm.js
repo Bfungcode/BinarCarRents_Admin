@@ -15,6 +15,7 @@ const handleSubmit = async (values, actions, dispatch, navigate, toggle) => {
         .unwrap()
         .then(() => {
             navigate('/dashboard');
+            window.location.reload();
         })
         .catch(() => {
             dispatch(setMessage('error'));
