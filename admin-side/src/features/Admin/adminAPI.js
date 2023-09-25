@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'https://bootcamp-rent-cars.herokuapp.com/';
+const API_URL = "https://api-car-rental.binaracademy.org/";
 const user = JSON.parse(localStorage.getItem('admin'));
 
 const getAllCars = (name, category, isRented, minPrice, maxPrice, page, pageSize) => {
